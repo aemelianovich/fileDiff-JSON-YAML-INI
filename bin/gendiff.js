@@ -11,5 +11,3 @@ gendiff
 gendiff.parse(process.argv);
 
 if (!gendiff.args.length) gendiff.help();
-
-export default gendiff;
