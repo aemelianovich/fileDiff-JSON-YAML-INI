@@ -1,12 +1,9 @@
 #!/usr/bin/env node
 
 import commander from 'commander';
-import compareJsonFiles from '../src/index.js'
+import compareJsonFiles from '../src/index.js';
 
 const gendiff = new commander.Command();
-
-let filepath1Value;
-let filepath2Value;
 
 gendiff
   .version('0.1.0', '-V, --version', 'output the version number')
