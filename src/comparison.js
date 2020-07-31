@@ -1,10 +1,10 @@
 import _ from 'lodash';
 
-const comparisonObj = {
-  equalSign: ' ',
+const Comparison = {
+  emptySign: ' ',
   addedSign: '+',
   removedSign: '-',
-  initComparisonObject(obj1, obj2) {
+  initComparison(obj1, obj2) {
     this.addedObj = {};
     this.removedObj = {};
     this.notChangedObj = {};
@@ -27,7 +27,7 @@ const comparisonObj = {
       if (obj1[el] === obj2[el]) {
         this.notChangedObj[el] = obj2[el];
       } else {
-        this.changedObj[el] = [obj2[el], obj1[el]];
+        this.changedObj[el] = [obj1[el], obj2[el]];
       }
     });
   },
@@ -36,11 +36,10 @@ const comparisonObj = {
   },
   toStringObj(obj) {
     const strArr = [];
-
     if (obj === this.changedObj) {
       Object.entries(obj).forEach((el) => {
-        strArr.push(this.toStringKeyValue(4, this.addedSign, el[0], el[1][0]));
         strArr.push(this.toStringKeyValue(4, this.removedSign, el[0], el[1][0]));
+        strArr.push(this.toStringKeyValue(4, this.addedSign, el[0], el[1][1]));
       });
     } else {
       let sign;
@@ -52,7 +51,7 @@ const comparisonObj = {
           sign = this.removedSign;
           break;
         case this.notChangedObj:
-          sign = this.removedSign;
+          sign = this.emptySign;
           break;
         default:
           throw new Error('Undefined object');
@@ -79,4 +78,4 @@ const comparisonObj = {
   },
 };
 
-export default comparisonObj;
+export default Comparison;

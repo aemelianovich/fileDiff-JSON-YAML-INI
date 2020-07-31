@@ -9,3 +9,13 @@ lint-fix:
 
 publish:
 	npm publish --dry-run
+
+test:
+	npm test
+
+test-watch:
+	npm test -- --watch
+
+test-coverage:
+	npm test -- --coverage --coverageProvider=v8
+.PHONY: test
