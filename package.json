@@ -6,6 +6,10 @@
   "scripts": {
     "test": "npx -n --experimental-vm-modules jest"
   },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {}
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aemelianovich/frontend-project-lvl2.git"
@@ -30,6 +34,7 @@
     "jest": "^26.2.1"
   },
   "dependencies": {
+    "@jest/globals": "^26.1.0",
     "commander": "^6.0.0",
     "lodash": "^4.17.19"
   }

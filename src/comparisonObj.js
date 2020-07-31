@@ -4,9 +4,6 @@ const comparisonObj = {
   equalSign: ' ',
   addedSign: '+',
   removedSign: '-',
-  addValue(value) {
-    return ((typeof (value) === 'object') ? JSON.parse(JSON.stringify(value)) : value);
-  },
   initComparisonObject(obj1, obj2) {
     this.addedObj = {};
     this.removedObj = {};
@@ -16,50 +13,65 @@ const comparisonObj = {
     const obj1Keys = Object.keys(obj1);
     const obj2Keys = Object.keys(obj2);
 
-    // Populate added key
+    // Populate added keys
     const addedKeys = _.difference(obj2Keys, obj1Keys);
-    addedKeys.forEach((el) => { this.addedObj[el] = this.addValue(obj2[el]); });
+    addedKeys.forEach((el) => { this.addedObj[el] = obj2[el]; });
 
-    // Populate removed key
+    // Populate removed keys
     const removedKeys = _.difference(obj1Keys, obj2Keys);
-    removedKeys.forEach((el) => { this.removedObj[el] = this.addValue(obj1[el]); });
+    removedKeys.forEach((el) => { this.removedObj[el] = obj1[el]; });
 
     // Populate notChanged and changed keys
     const commonKeys = _.intersection(obj1Keys, obj2Keys);
     commonKeys.forEach((el) => {
       if (obj1[el] === obj2[el]) {
-        this.notChangedObj[el] = this.addValue(obj2[el]);
+        this.notChangedObj[el] = obj2[el];
       } else {
-        this.changedObj[el] = [this.addValue(obj2[el]), this.addValue(obj1[el])];
+        this.changedObj[el] = [obj2[el], obj1[el]];
       }
     });
   },
   toStringKeyValue(indentNum, sign, key, value) {
     return `${' '.repeat(indentNum)}${sign} ${key}: ${value}`;
   },
+  toStringObj(obj) {
+    const strArr = [];
+
+    if (obj === this.changedObj) {
+      Object.entries(obj).forEach((el) => {
+        strArr.push(this.toStringKeyValue(4, this.addedSign, el[0], el[1][0]));
+        strArr.push(this.toStringKeyValue(4, this.removedSign, el[0], el[1][0]));
+      });
+    } else {
+      let sign;
+      switch (obj) {
+        case this.addedObj:
+          sign = this.addedSign;
+          break;
+        case this.removedObj:
+          sign = this.removedSign;
+          break;
+        case this.notChangedObj:
+          sign = this.removedSign;
+          break;
+        default:
+          throw new Error('Undefined object');
+      }
+
+      Object.entries(obj).forEach((el) => {
+        strArr.push(this.toStringKeyValue(4, sign, el[0], el[1]));
+      });
+    }
+
+    return strArr.join('\n');
+  },
   toString() {
     const strArr = ['{'];
 
-    // Add notChanged key:values
-    Object.entries(this.notChangedObj).forEach((el) => {
-      strArr.push(this.toStringKeyValue(4, this.equalSign, el[0], el[1]));
-    });
-
-    // Add changed key:values
-    Object.entries(this.changedObj).forEach((el) => {
-      strArr.push(this.toStringKeyValue(4, this.addedSign, el[0], el[1][0]));
-      strArr.push(this.toStringKeyValue(4, this.removedSign, el[0], el[1][0]));
-    });
-
-    // Add added key:values
-    Object.entries(this.addedObj).forEach((el) => {
-      strArr.push(this.toStringKeyValue(4, this.addedSign, el[0], el[1]));
-    });
-
-    // Add removed key:values
-    Object.entries(this.removedObj).forEach((el) => {
-      strArr.push(this.toStringKeyValue(4, this.removedSign, el[0], el[1]));
-    });
+    strArr.push(this.toStringObj(this.notChangedObj));
+    strArr.push(this.toStringObj(this.changedObj));
+    strArr.push(this.toStringObj(this.addedObj));
+    strArr.push(this.toStringObj(this.removedObj));
 
     strArr.push('}');
 
