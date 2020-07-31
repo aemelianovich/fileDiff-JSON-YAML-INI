@@ -80,6 +80,10 @@ test('Comparison.toStringObj(obj): get string for comparison plain sub objects',
   expect(comparisonObj.toStringObj(comparisonObj.removedObj)).toBe(removedObjStrResult);
 });
 
+test('Comparison.toStringObj(obj): get error for undefined sub objects', () => {
+  expect(() => comparisonObj.toStringObj({})).toThrow('Undefined object');
+});
+
 test('Comparison.toString(): get string for comparison plain objects', () => {
   expect(comparisonObj.toString()).toBe(comparisonStrResult);
 });
