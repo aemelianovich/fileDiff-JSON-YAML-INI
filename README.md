@@ -6,3 +6,6 @@
 
 gendiff plain JSON files:
 [![gendiff plain json](https://asciinema.org/a/DfcbNJFSlGgumDEPu7f0CBA75.svg)](https://asciinema.org/a/DfcbNJFSlGgumDEPu7f0CBA75)
+
+gendiff plain YAML files:
+[![gendiff plain yaml](https://asciinema.org/a/VU1SMPujPjetk16ZX594dcE7t.svg)](https://asciinema.org/a/VU1SMPujPjetk16ZX594dcE7t)
