@@ -1,16 +1,23 @@
 import { test, expect, beforeEach } from '@jest/globals';
-import compareJsonFiles from '../src/index.js';
+import compareFiles from '../src/index.js';
 import { getFixturePath } from '../src/utils.js';
 
-let filePath1;
-let filePath2;
-let jsonComparisonResult;
+let jsonFilePath1;
+let jsonFilePath2;
+
+let yamlFilePath1;
+let yamlFilePath2;
+
+let comparisonResult;
 
 beforeEach(() => {
-  filePath1 = getFixturePath('file1.json');
-  filePath2 = getFixturePath('file2.json');
+  jsonFilePath1 = getFixturePath('file1.json');
+  jsonFilePath2 = getFixturePath('file2.json');
 
-  jsonComparisonResult = ['{',
+  yamlFilePath1 = getFixturePath('file1.yml');
+  yamlFilePath2 = getFixturePath('file2.yml');
+
+  comparisonResult = ['{',
     '      host: hexlet.io',
     '    - timeout: 50',
     '    + timeout: 20',
@@ -20,6 +27,10 @@ beforeEach(() => {
     '}'].join('\n');
 });
 
-test('compareJsonFiles(file1, file2): get comparison for plain objects', () => {
-  expect(compareJsonFiles(filePath1, filePath2)).toEqual(jsonComparisonResult);
+test('compareFiles(file1, file2): get comparison for plain JSON', () => {
+  expect(compareFiles(jsonFilePath1, jsonFilePath2)).toEqual(comparisonResult);
+});
+
+test('compareFiles(file1, file2): get comparison for plain YAML', () => {
+  expect(compareFiles(yamlFilePath1, yamlFilePath2)).toEqual(comparisonResult);
 });

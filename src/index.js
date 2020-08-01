@@ -1,14 +1,14 @@
-import { readFile } from './utils.js';
+import parseFile from './parsers.js';
 import Comparison from './comparison.js';
 
-const compareJsonFiles = (filePath1, filePath2) => {
-  const jsonObj1 = JSON.parse(readFile(filePath1));
-  const jsonObj2 = JSON.parse(readFile(filePath2));
+const compareFiles = (filePath1, filePath2) => {
+  const obj1 = parseFile(filePath1);
+  const obj2 = parseFile(filePath2);
 
-  const jsonComparison = Object.create(Comparison);
-  jsonComparison.initComparison(jsonObj1, jsonObj2);
+  const comparisonObj = Object.create(Comparison);
+  comparisonObj.initComparison(obj1, obj2);
 
-  return jsonComparison.toString();
+  return comparisonObj.toString();
 };
 
-export default compareJsonFiles;
+export default compareFiles;

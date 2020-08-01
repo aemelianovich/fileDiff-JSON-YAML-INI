@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import commander from 'commander';
-import compareJsonFiles from '../src/index.js';
+import compareFiles from '../src/index.js';
 
 const gendiff = new commander.Command();
 
@@ -13,7 +13,7 @@ gendiff
 gendiff
   .arguments('<filepath1> <filepath2>')
   .action((filepath1, filepath2) => {
-    const res = compareJsonFiles(filepath1, filepath2);
+    const res = compareFiles(filepath1, filepath2);
     console.log(res);
   });
 
