@@ -1,5 +1,6 @@
 import path from 'path';
 import yaml from 'js-yaml';
+import ini from 'ini';
 import { readFile } from './utils.js';
 
 const parseFile = (filePath) => {
@@ -15,11 +16,15 @@ const parseFile = (filePath) => {
     case '.yaml':
       parse = yaml.safeLoad;
       break;
+    case '.ini':
+      parse = ini.parse;
+      break;
     default:
       throw new Error(`File format:"${format}" is not supported`);
   }
 
   const result = parse(data);
+
   const resultType = typeof (result);
 
   if (resultType !== 'object') {

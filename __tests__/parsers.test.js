@@ -6,12 +6,16 @@ import parseFile from '../src/parsers.js';
 let objResult;
 let jsonFilePath;
 let yamlFilePath;
+let iniFilePath;
+
 let yamlStrFilePath;
 let txtFilePath;
 
 beforeEach(() => {
   jsonFilePath = getFixturePath('file1.json');
   yamlFilePath = getFixturePath('file1.yml');
+  iniFilePath = getFixturePath('file1.ini');
+
   yamlStrFilePath = getFixturePath('fileStr.yml');
   txtFilePath = getFixturePath('test.txt');
 
@@ -29,6 +33,10 @@ test('parseFile: JSON file', () => {
 
 test('parseFile: YAML file', () => {
   expect(parseFile(yamlFilePath)).toEqual(objResult);
+});
+
+test('parseFile: INI file', () => {
+  expect(parseFile(iniFilePath)).toEqual(objResult);
 });
 
 test('parseFile: Unsupported format', () => {

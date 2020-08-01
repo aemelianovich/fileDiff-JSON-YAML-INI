@@ -8,6 +8,9 @@ let jsonFilePath2;
 let yamlFilePath1;
 let yamlFilePath2;
 
+let iniFilePath1;
+let iniFilePath2;
+
 let comparisonResult;
 
 beforeEach(() => {
@@ -16,6 +19,9 @@ beforeEach(() => {
 
   yamlFilePath1 = getFixturePath('file1.yml');
   yamlFilePath2 = getFixturePath('file2.yml');
+
+  iniFilePath1 = getFixturePath('file1.ini');
+  iniFilePath2 = getFixturePath('file2.ini');
 
   comparisonResult = ['{',
     '      host: hexlet.io',
@@ -33,4 +39,8 @@ test('compareFiles(file1, file2): get comparison for plain JSON', () => {
 
 test('compareFiles(file1, file2): get comparison for plain YAML', () => {
   expect(compareFiles(yamlFilePath1, yamlFilePath2)).toEqual(comparisonResult);
+});
+
+test('compareFiles(file1, file2): get comparison for plain INI', () => {
+  expect(compareFiles(iniFilePath1, iniFilePath2)).toEqual(comparisonResult);
 });
