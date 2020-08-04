@@ -2,8 +2,7 @@
 
 import commander from 'commander';
 import genDiff from '../src/index.js';
-import Stylish from '../src/formatter/stylish.js'
-import Comparison from '../src/comparison.js';
+import Stylish from '../src/formatter/stylish.js';
 
 const gendiff = new commander.Command();
 
