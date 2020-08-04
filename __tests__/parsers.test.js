@@ -12,9 +12,9 @@ let yamlStrFilePath;
 let txtFilePath;
 
 beforeEach(() => {
-  jsonFilePath = getFixturePath('file1.json');
-  yamlFilePath = getFixturePath('file1.yml');
-  iniFilePath = getFixturePath('file1.ini');
+  jsonFilePath = getFixturePath('file1PlainObject.json');
+  yamlFilePath = getFixturePath('file1PlainObject.yml');
+  iniFilePath = getFixturePath('file1PlainObject.ini');
 
   yamlStrFilePath = getFixturePath('fileStr.yml');
   txtFilePath = getFixturePath('test.txt');

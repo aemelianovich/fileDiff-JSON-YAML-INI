@@ -18,4 +18,9 @@ test-watch:
 
 test-coverage:
 	npm test -- --coverage --coverageProvider=v8
+
+test-comparison:
+	npm test -- __tests__/comparison.test.js
+test-stylish:
+	npm test -- __tests__/stylish.test.js	
 .PHONY: test

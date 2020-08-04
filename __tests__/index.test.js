@@ -1,46 +1,54 @@
 import { test, expect, beforeEach } from '@jest/globals';
 import compareFiles from '../src/index.js';
-import { getFixturePath } from '../src/utils.js';
+import { getFixturePath, readFixture } from '../src/utils.js';
 
-let jsonFilePath1;
-let jsonFilePath2;
+// JSON
+let jsonPlainObjFilePath1;
+let jsonPlainObjFilePath2;
 
-let yamlFilePath1;
-let yamlFilePath2;
+let jsonComplexObjFilePath1;
+let jsonComplexObjFilePath2;
 
-let iniFilePath1;
-let iniFilePath2;
+// YAML
+let yamlPlainObjFilePath1;
+let yamlPlainObjFilePath2;
+
+// INI
+let iniPlainObjFilePath1;
+let iniPlainObjFilePath2;
 
 let comparisonResult;
+let comparisonComplexResult;
 
 beforeEach(() => {
-  jsonFilePath1 = getFixturePath('file1.json');
-  jsonFilePath2 = getFixturePath('file2.json');
+  // JSON
+  jsonPlainObjFilePath1 = getFixturePath('file1PlainObject.json');
+  jsonPlainObjFilePath2 = getFixturePath('file2PlainObject.json');
 
-  yamlFilePath1 = getFixturePath('file1.yml');
-  yamlFilePath2 = getFixturePath('file2.yml');
+  jsonComplexObjFilePath1 = getFixturePath('file1ComplexObject.json');
+  jsonComplexObjFilePath2 = getFixturePath('file2ComplexObject.json');
 
-  iniFilePath1 = getFixturePath('file1.ini');
-  iniFilePath2 = getFixturePath('file2.ini');
+  // YAML
+  yamlPlainObjFilePath1 = getFixturePath('file1PlainObject.yml');
+  yamlPlainObjFilePath2 = getFixturePath('file2PlainObject.yml');
 
-  comparisonResult = ['{',
-    '      host: hexlet.io',
-    '    - timeout: 50',
-    '    + timeout: 20',
-    '    + verbose: true',
-    '    - proxy: 123.234.53.22',
-    '    - follow: false',
-    '}'].join('\n');
+  // INI
+  iniPlainObjFilePath1 = getFixturePath('file1PlainObject.ini');
+  iniPlainObjFilePath2 = getFixturePath('file2PlainObject.ini');
+
+  comparisonResult = readFixture('comparisonPlainObjStylishResult.txt');
+  comparisonComplexResult = readFixture('comparisonComplexObjStylishResult.txt');
 });
 
-test('compareFiles(file1, file2): get comparison for plain JSON', () => {
-  expect(compareFiles(jsonFilePath1, jsonFilePath2)).toEqual(comparisonResult);
+test('compareFiles(file1, file2, format = Stylish): JSON|YAML|INI format, get comparison for plain object', () => {
+  expect(compareFiles(jsonPlainObjFilePath1, jsonPlainObjFilePath2)).toEqual(comparisonResult);
+  expect(compareFiles(yamlPlainObjFilePath1, yamlPlainObjFilePath2)).toEqual(comparisonResult);
+  expect(compareFiles(iniPlainObjFilePath1, iniPlainObjFilePath2)).toEqual(comparisonResult);
 });
 
-test('compareFiles(file1, file2): get comparison for plain YAML', () => {
-  expect(compareFiles(yamlFilePath1, yamlFilePath2)).toEqual(comparisonResult);
-});
-
-test('compareFiles(file1, file2): get comparison for plain INI', () => {
-  expect(compareFiles(iniFilePath1, iniFilePath2)).toEqual(comparisonResult);
+test('compareFiles(file1, file2, format = Stylish): JSON format, get comparison for complex object', () => {
+  expect(compareFiles(
+    jsonComplexObjFilePath1,
+    jsonComplexObjFilePath2,
+  )).toEqual(comparisonComplexResult);
 });
