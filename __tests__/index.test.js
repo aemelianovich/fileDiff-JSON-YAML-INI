@@ -1,7 +1,7 @@
 import { test, expect, beforeEach } from '@jest/globals';
 import genDiff from '../src/index.js';
 import { getFixturePath, readFixture } from '../src/utils.js';
-
+import Stylish from '../src/formatter/stylish.js';
 // JSON
 let jsonPlainObjFilePath1;
 let jsonPlainObjFilePath2;
@@ -41,14 +41,15 @@ beforeEach(() => {
 });
 
 test('compareFiles(file1, file2, format = Stylish): JSON|YAML|INI format, get comparison for plain object', () => {
-  expect(genDiff(jsonPlainObjFilePath1, jsonPlainObjFilePath2)).toEqual(comparisonResult);
-  expect(genDiff(yamlPlainObjFilePath1, yamlPlainObjFilePath2)).toEqual(comparisonResult);
-  expect(genDiff(iniPlainObjFilePath1, iniPlainObjFilePath2)).toEqual(comparisonResult);
+  expect(genDiff(jsonPlainObjFilePath1, jsonPlainObjFilePath2, Stylish)).toEqual(comparisonResult);
+  expect(genDiff(yamlPlainObjFilePath1, yamlPlainObjFilePath2, Stylish)).toEqual(comparisonResult);
+  expect(genDiff(iniPlainObjFilePath1, iniPlainObjFilePath2, Stylish)).toEqual(comparisonResult);
 });
 
 test('compareFiles(file1, file2, format = Stylish): JSON format, get comparison for complex object', () => {
   expect(genDiff(
     jsonComplexObjFilePath1,
     jsonComplexObjFilePath2,
+    Stylish,
   )).toEqual(comparisonComplexResult);
 });
