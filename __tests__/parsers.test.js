@@ -12,12 +12,12 @@ let yamlStrFilePath;
 let txtFilePath;
 
 beforeEach(() => {
-  jsonFilePath = getFixturePath('file1PlainObject.json');
-  yamlFilePath = getFixturePath('file1PlainObject.yml');
-  iniFilePath = getFixturePath('file1PlainObject.ini');
+  jsonFilePath = getFixturePath('parser_files/json_object.json');
+  yamlFilePath = getFixturePath('parser_files/yaml_object.yml');
+  iniFilePath = getFixturePath('parser_files/ini_object.ini');
 
-  yamlStrFilePath = getFixturePath('fileStr.yml');
-  txtFilePath = getFixturePath('test.txt');
+  yamlStrFilePath = getFixturePath('parser_files/yaml_string.yml');
+  txtFilePath = getFixturePath('parser_files/test.txt');
 
   objResult = {
     host: 'hexlet.io',

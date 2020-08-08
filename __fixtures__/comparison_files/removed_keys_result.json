@@ -1,0 +1,66 @@
+{
+    "removedKeys": [
+      {
+        "keyDepthLevel": 0,
+        "keyIndex": {
+          "firstIndex": 2,
+          "secondIndex": -1
+        },
+        "keyName": "proxy",
+        "objectValue": null,
+        "plainValue": "123.234.53.22"
+      },
+      {
+        "keyDepthLevel": 0,
+        "keyIndex": {
+          "firstIndex": 3,
+          "secondIndex": -1
+        },
+        "keyName": "follow",
+        "objectValue": null,
+        "plainValue": false
+      },
+      {
+        "keyDepthLevel": 0,
+        "keyIndex": {
+          "firstIndex": 6,
+          "secondIndex": -1
+        },
+        "keyName": "group2",
+        "objectValue": [
+          {
+            "keyDepthLevel": 1,
+            "keyIndex": {
+              "firstIndex": 0,
+              "secondIndex": 0
+            },
+            "keyName": "abc",
+            "objectValue": null,
+            "plainValue": 12345
+          },
+          {
+            "keyDepthLevel": 1,
+            "keyIndex": {
+              "firstIndex": 1,
+              "secondIndex": 1
+            },
+            "keyName": "deep",
+            "objectValue": [
+              {
+                "keyDepthLevel": 2,
+                "keyIndex": {
+                  "firstIndex": 0,
+                  "secondIndex": 0
+                },
+                "keyName": "id",
+                "objectValue": null,
+                "plainValue": 45
+              }
+            ],
+            "plainValue": null
+          }
+        ],
+        "plainValue": null
+      }
+    ]
+  }

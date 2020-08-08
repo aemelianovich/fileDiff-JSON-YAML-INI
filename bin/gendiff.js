@@ -14,18 +14,7 @@ gendiff
 gendiff
   .arguments('<filepath1> <filepath2>')
   .action((filepath1, filepath2) => {
-    let format;
-    switch (gendiff.format) {
-      case 'stylish':
-        format = Stylish;
-        break;
-      case 'default':
-        format = undefined;
-        break;
-      default:
-        throw new Error(`Passed format is not supported: "${gendiff.format}"`);
-    }
-    const res = genDiff(filepath1, filepath2, format);
+    const res = genDiff(filepath1, filepath2, gendiff.format);
     console.log(res);
   });
 

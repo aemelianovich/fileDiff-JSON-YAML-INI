@@ -1,0 +1,14 @@
+{
+    "notChangedPlainKeys": [
+      {
+        "keyDepthLevel": 0,
+        "keyIndex": {
+          "firstIndex": 0,
+          "secondIndex": 2
+        },
+        "keyName": "host",
+        "objectValue": null,
+        "plainValue": "hexlet.io"
+      }
+    ]
+  }

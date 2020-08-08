@@ -23,4 +23,6 @@ test-comparison:
 	npm test -- __tests__/comparison.test.js
 test-stylish:
 	npm test -- __tests__/stylish.test.js	
+test-plain:
+	npm test -- __tests__/plain.test.js
 .PHONY: test

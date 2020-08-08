@@ -1,0 +1,26 @@
+{
+    "changedKeys": [
+      [
+        {
+          "keyDepthLevel": 0,
+          "keyIndex": {
+            "firstIndex": 1,
+            "secondIndex": 0
+          },
+          "keyName": "timeout",
+          "objectValue": null,
+          "plainValue": 50
+        },
+        {
+          "keyDepthLevel": 0,
+          "keyIndex": {
+            "firstIndex": 1,
+            "secondIndex": 0
+          },
+          "keyName": "timeout",
+          "objectValue": null,
+          "plainValue": 20
+        }
+      ]
+    ]
+  }

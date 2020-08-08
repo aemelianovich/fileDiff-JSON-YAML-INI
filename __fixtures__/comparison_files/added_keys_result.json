@@ -1,0 +1,67 @@
+{
+"addedKeys": [
+    {
+      "keyDepthLevel": 0,
+      "keyIndex": {
+        "firstIndex": -1,
+        "secondIndex": 1
+      },
+      "keyName": "verbose",
+      "objectValue": null,
+      "plainValue": true
+    },
+    {
+      "keyDepthLevel": 0,
+      "keyIndex": {
+        "firstIndex": -1,
+        "secondIndex": 5
+      },
+      "keyName": "group3",
+      "objectValue": [
+        {
+          "keyDepthLevel": 1,
+          "keyIndex": {
+            "firstIndex": 0,
+            "secondIndex": 0
+          },
+          "keyName": "fee",
+          "objectValue": null,
+          "plainValue": 100500
+        },
+        {
+          "keyDepthLevel": 1,
+          "keyIndex": {
+            "firstIndex": 1,
+            "secondIndex": 1
+          },
+          "keyName": "deep",
+          "objectValue": [
+            {
+              "keyDepthLevel": 2,
+              "keyIndex": {
+                "firstIndex": 0,
+                "secondIndex": 0
+              },
+              "keyName": "id",
+              "objectValue": [
+                {
+                  "keyDepthLevel": 3,
+                  "keyIndex": {
+                    "firstIndex": 0,
+                    "secondIndex": 0
+                  },
+                  "keyName": "number",
+                  "objectValue": null,
+                  "plainValue": 45
+                }
+              ],
+              "plainValue": null
+            }
+          ],
+          "plainValue": null
+        }
+      ],
+      "plainValue": null
+    }
+  ]
+}
