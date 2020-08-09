@@ -133,13 +133,10 @@ const Stylish = {
     const stylishStrArr = stylishKeyValues
       .sort(this.stylishSort)
       .flatMap((stylishKeyValueObj) => {
-        let stylishKeyValueStr;
-
         // Common object Key value
         if (stylishKeyValueObj.commonObjectStylishStr !== null) {
           // Build string for plain key value in stylish format
-          stylishKeyValueStr = stylishKeyValueObj.getStylishCommonObjKeyValueStr();
-          return stylishKeyValueStr;
+          return stylishKeyValueObj.getStylishCommonObjKeyValueStr();;
         }
 
         // Plain key value
@@ -150,8 +147,7 @@ const Stylish = {
           throw new Error('Either plainValue or objectValue should be empty(null).');
         } else if (stylishKeyValueObj.plainValue !== null) {
           // Build string for plain key value in stylish format
-          stylishKeyValueStr = stylishKeyValueObj.getStylishKeyValueStr();
-          return stylishKeyValueStr;
+          return stylishKeyValueObj.getStylishKeyValueStr();;
         }
 
         // Object key value
@@ -161,7 +157,7 @@ const Stylish = {
           stylishKeyValueObj.objectValue,
         );
 
-        stylishKeyValueStr = [
+        const stylishKeyValueStr = [
           `${stylishKeyValueObj.getKeyStr()}: ${this.openObjectStr}`,
           this.getStylishStr(stylishObjectValue),
           `${stylishKeyValueObj.getKeyIndent()}${this.closeObjectStr}`,
