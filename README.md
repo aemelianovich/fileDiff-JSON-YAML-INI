@@ -12,7 +12,7 @@ gendiff in stylish format:
 [![gendiff in stylish format](https://asciinema.org/a/1Jot1HMeOLeeUWzOfwG7S5JOB.svg)](https://asciinema.org/a/1Jot1HMeOLeeUWzOfwG7S5JOB)
 
 gendiff in plain format:
-
+[![gendiff in plain format](https://asciinema.org/a/zqK27pISl94dLchdP1txC4M4X.svg)](https://asciinema.org/a/zqK27pISl94dLchdP1txC4M4X)
 
 
 gendiff in json format:
