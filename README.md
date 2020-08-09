@@ -16,5 +16,6 @@ gendiff in plain format:
 
 
 gendiff in json format:
+[![gendiff in json format](https://asciinema.org/a/4OoJLTPO7Q524hqIt9Uikadje.svg)](https://asciinema.org/a/4OoJLTPO7Q524hqIt9Uikadje)
 
 
