@@ -9,8 +9,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/2068638216ca262b66d5/test_coverage)](https://codeclimate.com/github/aemelianovich/frontend-project-lvl2/test_coverage)
 
 gendiff in stylish format:
-
-
+[![gendiff in stylish format](https://asciinema.org/a/1Jot1HMeOLeeUWzOfwG7S5JOB.svg)](https://asciinema.org/a/1Jot1HMeOLeeUWzOfwG7S5JOB)
 
 gendiff in plain format:
 
