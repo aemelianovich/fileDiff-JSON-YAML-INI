@@ -23,6 +23,6 @@ beforeEach(() => {
   comparisonStrResult = readFixture('stylish_files/stylish_str_result.txt');
 });
 
-test('Comparison.toString(Stylish): get string for complex objects', () => {
+test('Stylish.toString(): get string for complex objects', () => {
   expect(Stylish.toString(comparisonObj)).toBe(comparisonStrResult);
 });

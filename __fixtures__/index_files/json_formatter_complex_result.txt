@@ -1,0 +1,386 @@
+{
+  "rootKey": null,
+  "addedKeys": [
+    {
+      "keyName": "group3",
+      "keyIndex": {
+        "firstIndex": -1,
+        "secondIndex": 2
+      },
+      "keyDepthLevel": 0,
+      "plainValue": null,
+      "objectValue": [
+        {
+          "keyName": "fee",
+          "keyIndex": {
+            "firstIndex": 0,
+            "secondIndex": 0
+          },
+          "keyDepthLevel": 1,
+          "plainValue": 100500,
+          "objectValue": null
+        },
+        {
+          "keyName": "deep",
+          "keyIndex": {
+            "firstIndex": 1,
+            "secondIndex": 1
+          },
+          "keyDepthLevel": 1,
+          "plainValue": null,
+          "objectValue": [
+            {
+              "keyName": "id",
+              "keyIndex": {
+                "firstIndex": 0,
+                "secondIndex": 0
+              },
+              "keyDepthLevel": 2,
+              "plainValue": null,
+              "objectValue": [
+                {
+                  "keyName": "number",
+                  "keyIndex": {
+                    "firstIndex": 0,
+                    "secondIndex": 0
+                  },
+                  "keyDepthLevel": 3,
+                  "plainValue": 45,
+                  "objectValue": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "removedKeys": [
+    {
+      "keyName": "group2",
+      "keyIndex": {
+        "firstIndex": 2,
+        "secondIndex": -1
+      },
+      "keyDepthLevel": 0,
+      "plainValue": null,
+      "objectValue": [
+        {
+          "keyName": "abc",
+          "keyIndex": {
+            "firstIndex": 0,
+            "secondIndex": 0
+          },
+          "keyDepthLevel": 1,
+          "plainValue": 12345,
+          "objectValue": null
+        },
+        {
+          "keyName": "deep",
+          "keyIndex": {
+            "firstIndex": 1,
+            "secondIndex": 1
+          },
+          "keyDepthLevel": 1,
+          "plainValue": null,
+          "objectValue": [
+            {
+              "keyName": "id",
+              "keyIndex": {
+                "firstIndex": 0,
+                "secondIndex": 0
+              },
+              "keyDepthLevel": 2,
+              "plainValue": 45,
+              "objectValue": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "notChangedPlainKeys": [],
+  "changedKeys": [],
+  "commonObjectKeys": [
+    {
+      "rootKey": {
+        "keyName": "common",
+        "keyIndex": {
+          "firstIndex": 0,
+          "secondIndex": 0
+        },
+        "keyDepthLevel": 0,
+        "plainValue": null,
+        "objectValue": null
+      },
+      "addedKeys": [
+        {
+          "keyName": "follow",
+          "keyIndex": {
+            "firstIndex": -1,
+            "secondIndex": 0
+          },
+          "keyDepthLevel": 1,
+          "plainValue": false,
+          "objectValue": null
+        },
+        {
+          "keyName": "setting4",
+          "keyIndex": {
+            "firstIndex": -1,
+            "secondIndex": 3
+          },
+          "keyDepthLevel": 1,
+          "plainValue": "blah blah",
+          "objectValue": null
+        },
+        {
+          "keyName": "setting5",
+          "keyIndex": {
+            "firstIndex": -1,
+            "secondIndex": 4
+          },
+          "keyDepthLevel": 1,
+          "plainValue": null,
+          "objectValue": [
+            {
+              "keyName": "key5",
+              "keyIndex": {
+                "firstIndex": 0,
+                "secondIndex": 0
+              },
+              "keyDepthLevel": 2,
+              "plainValue": "value5",
+              "objectValue": null
+            }
+          ]
+        }
+      ],
+      "removedKeys": [
+        {
+          "keyName": "setting2",
+          "keyIndex": {
+            "firstIndex": 1,
+            "secondIndex": -1
+          },
+          "keyDepthLevel": 1,
+          "plainValue": 200,
+          "objectValue": null
+        }
+      ],
+      "notChangedPlainKeys": [
+        {
+          "keyName": "setting1",
+          "keyIndex": {
+            "firstIndex": 0,
+            "secondIndex": 1
+          },
+          "keyDepthLevel": 1,
+          "plainValue": "Value 1",
+          "objectValue": null
+        }
+      ],
+      "changedKeys": [
+        [
+          {
+            "keyName": "setting3",
+            "keyIndex": {
+              "firstIndex": 2,
+              "secondIndex": 2
+            },
+            "keyDepthLevel": 1,
+            "plainValue": true,
+            "objectValue": null
+          },
+          {
+            "keyName": "setting3",
+            "keyIndex": {
+              "firstIndex": 2,
+              "secondIndex": 2
+            },
+            "keyDepthLevel": 1,
+            "plainValue": null,
+            "objectValue": [
+              {
+                "keyName": "key",
+                "keyIndex": {
+                  "firstIndex": 0,
+                  "secondIndex": 0
+                },
+                "keyDepthLevel": 2,
+                "plainValue": "value",
+                "objectValue": null
+              }
+            ]
+          }
+        ]
+      ],
+      "commonObjectKeys": [
+        {
+          "rootKey": {
+            "keyName": "setting6",
+            "keyIndex": {
+              "firstIndex": 3,
+              "secondIndex": 5
+            },
+            "keyDepthLevel": 1,
+            "plainValue": null,
+            "objectValue": null
+          },
+          "addedKeys": [
+            {
+              "keyName": "ops",
+              "keyIndex": {
+                "firstIndex": -1,
+                "secondIndex": 1
+              },
+              "keyDepthLevel": 2,
+              "plainValue": "vops",
+              "objectValue": null
+            }
+          ],
+          "removedKeys": [],
+          "notChangedPlainKeys": [
+            {
+              "keyName": "key",
+              "keyIndex": {
+                "firstIndex": 0,
+                "secondIndex": 0
+              },
+              "keyDepthLevel": 2,
+              "plainValue": "value",
+              "objectValue": null
+            }
+          ],
+          "changedKeys": [],
+          "commonObjectKeys": [
+            {
+              "rootKey": {
+                "keyName": "doge",
+                "keyIndex": {
+                  "firstIndex": 1,
+                  "secondIndex": 2
+                },
+                "keyDepthLevel": 2,
+                "plainValue": null,
+                "objectValue": null
+              },
+              "addedKeys": [],
+              "removedKeys": [],
+              "notChangedPlainKeys": [],
+              "changedKeys": [
+                [
+                  {
+                    "keyName": "wow",
+                    "keyIndex": {
+                      "firstIndex": 0,
+                      "secondIndex": 0
+                    },
+                    "keyDepthLevel": 3,
+                    "plainValue": "too much",
+                    "objectValue": null
+                  },
+                  {
+                    "keyName": "wow",
+                    "keyIndex": {
+                      "firstIndex": 0,
+                      "secondIndex": 0
+                    },
+                    "keyDepthLevel": 3,
+                    "plainValue": "so much",
+                    "objectValue": null
+                  }
+                ]
+              ],
+              "commonObjectKeys": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rootKey": {
+        "keyName": "group1",
+        "keyIndex": {
+          "firstIndex": 1,
+          "secondIndex": 1
+        },
+        "keyDepthLevel": 0,
+        "plainValue": null,
+        "objectValue": null
+      },
+      "addedKeys": [],
+      "removedKeys": [],
+      "notChangedPlainKeys": [
+        {
+          "keyName": "foo",
+          "keyIndex": {
+            "firstIndex": 1,
+            "secondIndex": 0
+          },
+          "keyDepthLevel": 1,
+          "plainValue": "bar",
+          "objectValue": null
+        }
+      ],
+      "changedKeys": [
+        [
+          {
+            "keyName": "baz",
+            "keyIndex": {
+              "firstIndex": 0,
+              "secondIndex": 1
+            },
+            "keyDepthLevel": 1,
+            "plainValue": "bas",
+            "objectValue": null
+          },
+          {
+            "keyName": "baz",
+            "keyIndex": {
+              "firstIndex": 0,
+              "secondIndex": 1
+            },
+            "keyDepthLevel": 1,
+            "plainValue": "bars",
+            "objectValue": null
+          }
+        ],
+        [
+          {
+            "keyName": "nest",
+            "keyIndex": {
+              "firstIndex": 2,
+              "secondIndex": 2
+            },
+            "keyDepthLevel": 1,
+            "plainValue": null,
+            "objectValue": [
+              {
+                "keyName": "key",
+                "keyIndex": {
+                  "firstIndex": 0,
+                  "secondIndex": 0
+                },
+                "keyDepthLevel": 2,
+                "plainValue": "value",
+                "objectValue": null
+              }
+            ]
+          },
+          {
+            "keyName": "nest",
+            "keyIndex": {
+              "firstIndex": 2,
+              "secondIndex": 2
+            },
+            "keyDepthLevel": 1,
+            "plainValue": "str",
+            "objectValue": null
+          }
+        ]
+      ],
+      "commonObjectKeys": []
+    }
+  ]
+}

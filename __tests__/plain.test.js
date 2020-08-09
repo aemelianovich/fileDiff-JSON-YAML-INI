@@ -22,6 +22,6 @@ beforeEach(() => {
   comparisonStrResult = readFixture('plain_files/plain_str_result.txt');
 });
 
-test('Comparison.toString(Stylish): get string for complex objects', () => {
+test('Plain.toString(): get string for complex objects', () => {
   expect(Plain.toString(comparisonObj)).toBe(comparisonStrResult);
 });

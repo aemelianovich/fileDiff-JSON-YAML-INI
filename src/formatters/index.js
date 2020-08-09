@@ -1,5 +1,6 @@
 import Stylish from './stylish.js';
 import Plain from './plain.js';
+import JsonFormatter from './jsonFormatter.js';
 
 const getFormattedStr = (comparisonObj, format) => {
   let formattedStr;
@@ -9,6 +10,9 @@ const getFormattedStr = (comparisonObj, format) => {
       break;
     case 'plain':
       formattedStr = Plain.toString(comparisonObj);
+      break;
+    case 'json':
+      formattedStr = JsonFormatter.toString(comparisonObj);
       break;
     default:
       throw new Error(`Unsupported format: "${format}"`);
