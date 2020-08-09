@@ -14,7 +14,6 @@ let comparisonStrResult;
 beforeEach(() => {
   // Init data
   obj1 = JSON.parse(readFixture('plain_files/obj1.json'));
-
   obj2 = JSON.parse(readFixture('plain_files/obj2.json'));
 
   comparisonObj = Object.create(Comparison);
@@ -24,5 +23,5 @@ beforeEach(() => {
 });
 
 test('Comparison.toString(Stylish): get string for complex objects', () => {
-  expect(Plain.toString(comparisonObj)).toBe('');
+  expect(Plain.toString(comparisonObj)).toBe(comparisonStrResult);
 });

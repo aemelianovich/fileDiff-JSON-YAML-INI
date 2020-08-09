@@ -69,4 +69,3 @@ test('compareFiles(file1, file2, format = Plain): JSON format, get comparison fo
     format,
   )).toEqual(plainComplexResult);
 });
-

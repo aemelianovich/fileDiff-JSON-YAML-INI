@@ -1,11 +1,13 @@
 // Object that extends ComparisonKeyValue object to StylishKeyValue format.
 // StylishKeyValue
 // {
-//    objectKeyIndentNum,
 //    keySign,
-//    get keyIndentNum()
-//    get KeyIndent(),
-//    get KeyStr(),
+//    indentNum,
+//    commonObjectStylishStr
+//    getKeyIndentNum()
+//    getKeyIndent(),
+//    getKeyStr(),
+//    getStylishKeyValueStr(),
 //
 //    // Assign Stylish properties
 //    // Link StylishKeyValue object with particular comparisonKeyValue object
@@ -23,6 +25,12 @@ const StylishKeyValue = {
     this.getKeyStr = function getKeyStr() {
       return `${' '.repeat(this.getKeyIndentNum() - this.keySign.length)}${this.keySign}${this.keyName}`;
     };
+    this.getStylishKeyValueStr = function getStylishKeyValueStr() {
+      return `${this.getKeyStr()}: ${this.plainValue}`;
+    };
+    this.getStylishCommonObjKeyValueStr = function getStylishKeyValueStr() {
+      return `${this.getKeyStr()}: ${this.commonObjectStylishStr}`;
+    };
 
     // Link stylishKeyValue with corresponding comparisonKeyValue
     Object.setPrototypeOf(this, comparisonKeyValue);
@@ -33,6 +41,7 @@ const StylishKeyValue = {
 // Stylish
 // {
 //    name,
+//    objectKeyIndentNum,
 //    addedSign,
 //    removedSign,
 //    notChangedSign,
@@ -41,9 +50,10 @@ const StylishKeyValue = {
 //    commonObjectSign,
 //    openObjectStr,
 //    closeObjectStr,
+//    getCloseObjectStr(),
 //
 //    //Sort that will be used to present object keys
-//    stylishArrSort(StylishKeyValue, StylishKeyValue),
+//    stylishSort(StylishKeyValue, StylishKeyValue),
 //
 //    //Get stylish common object key as StylishKeyValue from ComparisonKeyValue
 //    getStylishCommonObjectKey(comparisonKeyValue, commonObjectValue);
@@ -60,10 +70,10 @@ const StylishKeyValue = {
 const Stylish = {
   name: 'stylish',
   objectKeyIndentNum: 4,
-  notChangedSign: '  ',
-  changedSign: { firstObjSign: '- ', secondObjSign: '+ ' },
   addedSign: '+ ',
   removedSign: '- ',
+  notChangedSign: '  ',
+  changedSign: { firstObjSign: '- ', secondObjSign: '+ ' },
   emptySign: '',
   commonObjectSign: '',
   openObjectStr: '{',
@@ -128,7 +138,7 @@ const Stylish = {
         // Common object Key value
         if (stylishKeyValueObj.commonObjectStylishStr !== null) {
           // Build string for plain key value in stylish format
-          stylishKeyValueStr = `${stylishKeyValueObj.getKeyStr()}: ${stylishKeyValueObj.commonObjectStylishStr}`;
+          stylishKeyValueStr = stylishKeyValueObj.getStylishCommonObjKeyValueStr();
           return stylishKeyValueStr;
         }
 
@@ -140,7 +150,7 @@ const Stylish = {
           throw new Error('Either plainValue or objectValue should be empty(null).');
         } else if (stylishKeyValueObj.plainValue !== null) {
           // Build string for plain key value in stylish format
-          stylishKeyValueStr = `${stylishKeyValueObj.getKeyStr()}: ${stylishKeyValueObj.plainValue}`;
+          stylishKeyValueStr = stylishKeyValueObj.getStylishKeyValueStr();
           return stylishKeyValueStr;
         }
 
@@ -160,32 +170,31 @@ const Stylish = {
         return stylishKeyValueStr;
       });
 
-    const resArr = [...stylishStrArr];
-    return resArr.join('\n');
+    return stylishStrArr.join('\n');
   },
   toString(comparisonObj) {
     // Get depth level for the comparisonObj
     const depthLevel = (comparisonObj.rootKey) ? comparisonObj.rootKey.keyDepthLevel : -1;
 
-    // Get array of StylishKeyValue object for added ComparisonsKeyValue objects
+    // Get array of StylishKeyValue objects for added ComparisonsKeyValue objects
     const addedStylishKeys = this.getStylishKeys(
       this.addedSign,
       comparisonObj.addedKeys,
     );
 
-    // Get array of StylishKeyValue object for removed ComparisonsKeyValue objects
+    // Get array of StylishKeyValue objects for removed ComparisonsKeyValue objects
     const removedStylishKeys = this.getStylishKeys(
       this.removedSign,
       comparisonObj.removedKeys,
     );
 
-    // Get array of StylishKeyValue object for not changed ComparisonsKeyValue objects
+    // Get array of StylishKeyValue objects for not changed ComparisonsKeyValue objects
     const notChangedStylishKeys = this.getStylishKeys(
       this.notChangedSign,
       comparisonObj.notChangedPlainKeys,
     );
 
-    // Get array of StylishKeyValue object for changed ComparisonsKeyValue objects
+    // Get array of StylishKeyValue objects for changed ComparisonsKeyValue objects
     // Object 1
     const changedKeysObj1 = comparisonObj.changedKeys
       .map((changedKeyValueObjects) => changedKeyValueObjects[0]);
@@ -194,7 +203,7 @@ const Stylish = {
       this.changedSign.firstObjSign,
       changedKeysObj1,
     );
-
+    // Object 2
     const changedKeysObj2 = comparisonObj.changedKeys
       .map((changedKeyValueObjects) => changedKeyValueObjects[1]);
 
