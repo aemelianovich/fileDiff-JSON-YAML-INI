@@ -136,7 +136,7 @@ const Stylish = {
         // Common object Key value
         if (stylishKeyValueObj.commonObjectStylishStr !== null) {
           // Build string for plain key value in stylish format
-          return stylishKeyValueObj.getStylishCommonObjKeyValueStr();;
+          return stylishKeyValueObj.getStylishCommonObjKeyValueStr();
         }
 
         // Plain key value
@@ -147,7 +147,7 @@ const Stylish = {
           throw new Error('Either plainValue or objectValue should be empty(null).');
         } else if (stylishKeyValueObj.plainValue !== null) {
           // Build string for plain key value in stylish format
-          return stylishKeyValueObj.getStylishKeyValueStr();;
+          return stylishKeyValueObj.getStylishKeyValueStr();
         }
 
         // Object key value
