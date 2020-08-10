@@ -209,55 +209,59 @@ const Plain = {
 
     return plainStrArr.join('\n');
   },
-  toString(comparisonObj, parentKeyPath = null) {
-    // Get full path to the root key
-    const fullRootKeyPath = this.getRootFullPath(comparisonObj.rootKey, parentKeyPath);
+  toString(comparisonObj) {
+    const iter = (innerComparisonObj, parentKeyPath) => {
+      // Get full path to the root key
+      const fullRootKeyPath = this.getRootFullPath(innerComparisonObj.rootKey, parentKeyPath);
 
-    // Get array of PlainKeyValue object for added ComparisonsKeyValue objects
-    const addedPlainKeys = this.getPlainKeys(
-      this.added,
-      fullRootKeyPath,
-      comparisonObj.addedKeys,
-    );
+      // Get array of PlainKeyValue object for added ComparisonsKeyValue objects
+      const addedPlainKeys = this.getPlainKeys(
+        this.added,
+        fullRootKeyPath,
+        innerComparisonObj.addedKeys,
+      );
 
-    // Get array of PlainKeyValue object for removed ComparisonsKeyValue objects
-    const removedPlainKeys = this.getPlainKeys(
-      this.removed,
-      fullRootKeyPath,
-      comparisonObj.removedKeys,
-    );
+      // Get array of PlainKeyValue object for removed ComparisonsKeyValue objects
+      const removedPlainKeys = this.getPlainKeys(
+        this.removed,
+        fullRootKeyPath,
+        innerComparisonObj.removedKeys,
+      );
 
-    // Get array of PlainKeyValue object for changed ComparisonsKeyValue objects
-    const changedPlainKeys = this.getPlainKeys(
-      this.changed,
-      fullRootKeyPath,
-      comparisonObj.changedKeys,
-    );
+      // Get array of PlainKeyValue object for changed ComparisonsKeyValue objects
+      const changedPlainKeys = this.getPlainKeys(
+        this.changed,
+        fullRootKeyPath,
+        innerComparisonObj.changedKeys,
+      );
 
-    const commonObjectPlainKeys = comparisonObj.commonObjectKeys
-      .flatMap((comparisonSubObj) => {
-        const commonObjectPlainStr = this.toString(comparisonSubObj, fullRootKeyPath);
-        // Get Plain common object Key for ComparisonsKeyValue object
-        const commonObjectPlainKey = this.getCommonObjectPlainKey(
-          this.common,
-          fullRootKeyPath,
-          comparisonSubObj.rootKey,
-          commonObjectPlainStr,
-        );
+      const commonObjectPlainKeys = innerComparisonObj.commonObjectKeys
+        .flatMap((comparisonSubObj) => {
+          const commonObjectPlainStr = iter(comparisonSubObj, fullRootKeyPath);
+          // Get Plain common object Key for ComparisonsKeyValue object
+          const commonObjectPlainKey = this.getCommonObjectPlainKey(
+            this.common,
+            fullRootKeyPath,
+            comparisonSubObj.rootKey,
+            commonObjectPlainStr,
+          );
 
-        return commonObjectPlainKey;
-      });
+          return commonObjectPlainKey;
+        });
 
-    // Get string in plain format for the PlainKeValue objects array
-    const plainStr = this.getPlainStr([
-      ...addedPlainKeys,
-      ...removedPlainKeys,
-      ...changedPlainKeys,
-      ...commonObjectPlainKeys,
-    ]);
+      // Get string in plain format for the PlainKeValue objects array
+      const plainStr = this.getPlainStr([
+        ...addedPlainKeys,
+        ...removedPlainKeys,
+        ...changedPlainKeys,
+        ...commonObjectPlainKeys,
+      ]);
 
-    // Build final string
-    return plainStr;
+      // Build final string
+      return plainStr;
+    };
+
+    return iter(comparisonObj, null);
   },
 };
 
