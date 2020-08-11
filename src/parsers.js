@@ -1,14 +1,9 @@
-import path from 'path';
 import yaml from 'js-yaml';
 import ini from 'ini';
-import { readFile } from './utils.js';
 
-const parseFile = (filePath) => {
-  const format = path.extname(filePath).toLowerCase();
-  const data = readFile(filePath);
-
+const parseFile = (data, format) => {
   let parse;
-  switch (format) {
+  switch (format.toLowerCase()) {
     case '.json':
       parse = JSON.parse;
       break;

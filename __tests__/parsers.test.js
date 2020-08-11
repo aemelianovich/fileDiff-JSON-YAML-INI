@@ -1,23 +1,23 @@
 import { test, expect, beforeEach } from '@jest/globals';
-import { getFixturePath } from '../src/utils.js';
+import { readFixture } from '../src/utils.js';
 import parseFile from '../src/parsers.js';
 
 // Result variables
 let objResult;
-let jsonFilePath;
-let yamlFilePath;
-let iniFilePath;
+let jsonFileData;
+let yamlFileData;
+let iniFileData;
 
-let yamlStrFilePath;
-let txtFilePath;
+let yamlStrFileData;
+let txtFileData;
 
 beforeEach(() => {
-  jsonFilePath = getFixturePath('parser_files/json_object.json');
-  yamlFilePath = getFixturePath('parser_files/yaml_object.yml');
-  iniFilePath = getFixturePath('parser_files/ini_object.ini');
+  jsonFileData = readFixture('parser_files/json_object.json');
+  yamlFileData = readFixture('parser_files/yaml_object.yml');
+  iniFileData = readFixture('parser_files/ini_object.ini');
 
-  yamlStrFilePath = getFixturePath('parser_files/yaml_string.yml');
-  txtFilePath = getFixturePath('parser_files/test.txt');
+  yamlStrFileData = readFixture('parser_files/yaml_string.yml');
+  txtFileData = readFixture('parser_files/test.txt');
 
   objResult = {
     host: 'hexlet.io',
@@ -28,21 +28,26 @@ beforeEach(() => {
 });
 
 test('parseFile: JSON file', () => {
-  expect(parseFile(jsonFilePath)).toEqual(objResult);
+  const fileFormat = '.json';
+  expect(parseFile(jsonFileData, fileFormat)).toEqual(objResult);
 });
 
 test('parseFile: YAML file', () => {
-  expect(parseFile(yamlFilePath)).toEqual(objResult);
+  const fileFormat = '.yml';
+  expect(parseFile(yamlFileData, fileFormat)).toEqual(objResult);
 });
 
 test('parseFile: INI file', () => {
-  expect(parseFile(iniFilePath)).toEqual(objResult);
+  const fileFormat = '.ini';
+  expect(parseFile(iniFileData, fileFormat)).toEqual(objResult);
 });
 
 test('parseFile: Unsupported format', () => {
-  expect(() => parseFile(txtFilePath)).toThrow('File format:".txt" is not supported');
+  const fileFormat = '.txt';
+  expect(() => parseFile(txtFileData, fileFormat)).toThrow('File format:".txt" is not supported');
 });
 
 test('parseFile: Unsupported parsed type', () => {
-  expect(() => parseFile(yamlStrFilePath)).toThrow('Result should be an object. Result type: "string"');
+  const fileFormat = '.yml';
+  expect(() => parseFile(yamlStrFileData, fileFormat)).toThrow('Result should be an object. Result type: "string"');
 });
