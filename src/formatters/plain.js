@@ -1,268 +1,83 @@
-// Object that extends ComparisonKeyValue object to PlainKeyValue format.
-// PlainKeyValue
-// {
-//    keyType,
-//    parentKeyPath,
-//    getKeyFullPath(),
-//    getPlainValueStr(),
-//    getPlainKeyValueStr(),
-//
-//    //Optional, for changed keys only:
-//    plainValueObj2,
-//    objectValueObj2,
-//    getPlainValueStrObj2(),
-//
-//    //Optional, for common keys only:
-//    commonObjectPlainStr,
-//
-//    // Assign Plain properties
-//    // Link PlainKeyValue object with particular comparisonKeyValue object
-//    initPlainKeyValue(
-//      keyType,
-//      parentKeyPath,
-//      comparisonKeyValue,
-//      comparisonKeyValueObj2,
-//      commonObjectPlainStr
-//    )
-// }
-const PlainKeyValue = {
-  initPlainKeyValue(
-    keyType,
-    parentKeyPath,
-    comparisonKeyValue,
-    comparisonKeyValueObj2 = null,
-    commonObjectPlainStr = null,
-  ) {
-    this.keyType = keyType;
-    this.parentKeyPath = parentKeyPath;
-    this.getKeyFullPath = function getKeyFullPath() {
-      const keyFullPath = (this.parentKeyPath) ? `${this.parentKeyPath}.${this.keyName}` : this.keyName;
-      return keyFullPath;
-    };
-    this.getPlainValueStr = function getPlainValueStr() {
-      if (this.plainValue !== null) {
-        return (typeof (this.plainValue) === 'string') ? `'${this.plainValue}'` : this.plainValue;
-      }
+import _ from 'lodash';
 
-      if (this.objectValue !== null) {
-        return '[complex value]';
-      }
+const plainSort = (obj1, obj2) => {
+  if (obj1.keyName < obj2.keyName) {
+    return -1;
+  }
+  if (obj1.keyName > obj2.keyName) {
+    return 1;
+  }
 
-      throw new Error('Either plain value or object value should be not equal to "null"');
-    };
-
-    // Choose method to show diff in plain format based on type of the key
-    switch (keyType) {
-      case 'added':
-        this.getPlainKeyValueStr = function getPlainKeyValueStr() {
-          return `Property '${this.getKeyFullPath()}' was added with value: ${this.getPlainValueStr()}`;
-        };
-        break;
-      case 'removed':
-        this.getPlainKeyValueStr = function getPlainKeyValueStr() {
-          return `Property '${this.getKeyFullPath()}' was removed`;
-        };
-        break;
-      case 'changed':
-        this.plainValueObj2 = comparisonKeyValueObj2.plainValue;
-        this.objectValueObj2 = comparisonKeyValueObj2.objectValue;
-        this.getPlainValueStrObj2 = function getPlainValueStrObj2() {
-          if (this.plainValueObj2 !== null) {
-            return (typeof (this.plainValueObj2) === 'string') ? `'${this.plainValueObj2}'` : this.plainValueObj2;
-          }
-
-          if (this.objectValueObj2 !== null) {
-            return '[complex value]';
-          }
-
-          throw new Error('Either plain value or object value should be not equal to "null"');
-        };
-        this.getPlainKeyValueStr = function getPlainKeyValueStr() {
-          return `Property '${this.getKeyFullPath()}' was updated. From ${this.getPlainValueStr()} to ${this.getPlainValueStrObj2()}`;
-        };
-        break;
-      case 'common':
-        this.commonObjectPlainStr = commonObjectPlainStr;
-        this.getPlainKeyValueStr = function getPlainKeyValueStr() {
-          return this.commonObjectPlainStr;
-        };
-        break;
-      default:
-        throw new Error(`Unsupported key type: "${keyType}"`);
-    }
-
-    // Link plainKeyValue with corresponding comparisonKeyValue
-    Object.setPrototypeOf(this, comparisonKeyValue);
-  },
+  return 0;
 };
 
-// Object that converts Comparison object into string using plain format.
-// Plain
-// {
-//    name,
-//    added,
-//    removed,
-//    changed,
-//    common,
-//    emptySign,
-//    commonObjectSign,
-//    openObjectStr,
-//    closeObjectStr,
-//
-//    // Sort that will be used to present object keys
-//    plainSort(PlainKeyValue, PlainKeyValue),
-//
-//    // Build full path to the root key
-//    getRootFullPath(rootKey, parentKeyPath)
-//
-//    //Get plain common object key as PlainKeyValue from ComparisonKeyValue
-//    getPlainCommonObjectKey(keyType, fullRootKeyPath, comparisonKeyValue, commonObjectPlainStr);
-//
-//    //Get plain keys as PlainKeyValue array from ComparisonKeyValue Array
-//    getPlainKeys(keyType, fullRootKeyPath, comparisonKeyValues)
-//
-//    // Convert Plain keys into the string
-//    getPlainStr([PlainKeyValue]),
-//
-//    // Convert comparison object into string
-//    toString(comparisonObj)
-// }
-const Plain = {
-  name: 'plain',
-  added: 'added',
-  removed: 'removed',
-  changed: 'changed',
-  common: 'common',
-  plainSort(obj1, obj2) {
-    // eslint-disable-next-line max-len
-    const obj1Comparator = (obj1.keyIndex.secondIndex === -1) ? obj1.keyIndex.firstIndex : obj1.keyIndex.secondIndex;
-    // eslint-disable-next-line max-len
-    const obj2Comparator = (obj2.keyIndex.secondIndex === -1) ? obj2.keyIndex.firstIndex : obj2.keyIndex.secondIndex;
+const getKeyFullPath = (parentKeyFullPath, keyName) => {
+  const keyFullPath = (parentKeyFullPath) ? `${parentKeyFullPath}.${keyName}` : keyName;
+  return keyFullPath;
+};
 
-    if (obj1Comparator === obj2Comparator) {
-      if (obj1.keyName < obj2.keyName) {
-        return -1;
-      }
-      if (obj1.keyName > obj2.keyName) {
-        return 1;
-      }
+const getPlainValueStr = (value) => {
+  if (!(_.isObject(value))) {
+    return (typeof (value) === 'string') ? `'${value}'` : value;
+  }
 
-      return 0;
-    }
+  return '[complex value]';
+};
 
-    return obj1Comparator - obj2Comparator;
-  },
-  getRootFullPath(rootKey, parentKeyPath) {
-    if (parentKeyPath === null && rootKey === null) {
-      return null;
-    }
+const getAddedPlainStr = (parentKeyFullPath, keyName, value) => {
+  const keyFullPath = getKeyFullPath(parentKeyFullPath, keyName);
+  const plainValueStr = getPlainValueStr(value);
+  return `Property '${keyFullPath}' was added with value: ${plainValueStr}`;
+};
 
-    if (parentKeyPath === null && rootKey !== null) {
-      return rootKey.keyName;
-    }
+const getRemovedPlainStr = (parentKeyFullPath, keyName) => {
+  const keyFullPath = getKeyFullPath(parentKeyFullPath, keyName);
+  return `Property '${keyFullPath}' was removed`;
+};
 
-    if (parentKeyPath !== null && rootKey !== null) {
-      return `${parentKeyPath}.${rootKey.keyName}`;
-    }
+const getChangedPlainStr = (parentKeyFullPath, keyName, value1, value2) => {
+  const keyFullPath = getKeyFullPath(parentKeyFullPath, keyName);
+  const plainValueStr1 = getPlainValueStr(value1);
+  const plainValueStr2 = getPlainValueStr(value2);
+  return `Property '${keyFullPath}' was updated. From ${plainValueStr1} to ${plainValueStr2}`;
+};
 
-    throw new Error(`Unsupported combination of parentKeyPath ("${parentKeyPath}") and rootKey ("${rootKey}")`);
-  },
-  getCommonObjectPlainKey(keyType, fullRootKeyPath, comparisonKeyValue, commonObjectPlainStr) {
-    const commonObjPlainKey = Object.create(PlainKeyValue);
-    // Path appropriate keyType to add necessary properties into plainKeyValue object
-    // link plainKeyValue obj with corresponding comparisonKeyValue obj
-    // add commonObjectPlainStr value
-    commonObjPlainKey.initPlainKeyValue(
-      keyType,
-      fullRootKeyPath,
-      comparisonKeyValue,
-      null,
-      commonObjectPlainStr,
-    );
-
-    return commonObjPlainKey;
-  },
-  getPlainKeys(keyType, fullRootKeyPath, comparisonKeyValues) {
-    const plainKeyValues = comparisonKeyValues
-      .map((comparisonKeyValue) => {
-        const plainKeyValueObj = Object.create(PlainKeyValue);
-        if (keyType === this.changed) {
-          plainKeyValueObj.initPlainKeyValue(
-            keyType,
-            fullRootKeyPath,
-            comparisonKeyValue[0],
-            comparisonKeyValue[1],
-          );
-        } else {
-          // Add sign and link plainKeyValue obj with corresponding comparisonKeyValue obj
-          plainKeyValueObj.initPlainKeyValue(keyType, fullRootKeyPath, comparisonKeyValue);
+const getPlainResult = (comparisonAST) => {
+  const innerIter = (innerComparisonAST, parentKeyFullPath) => {
+    const plainKeyValues = innerComparisonAST
+      .filter((keyObj) => (
+        keyObj.type === 'added'
+        || keyObj.type === 'removed'
+        || keyObj.type === 'changed'
+        || keyObj.type === 'nested'
+      ))
+      .sort(plainSort)
+      .map((keyObj) => {
+        let keyFullPath;
+        switch (keyObj.type) {
+          case 'added':
+            return getAddedPlainStr(parentKeyFullPath, keyObj.keyName, keyObj.value);
+          case 'removed':
+            return getRemovedPlainStr(parentKeyFullPath, keyObj.keyName);
+          case 'changed':
+            return getChangedPlainStr(
+              parentKeyFullPath,
+              keyObj.keyName,
+              keyObj.value1,
+              keyObj.value2,
+            );
+          case 'nested':
+            keyFullPath = getKeyFullPath(parentKeyFullPath, keyObj.keyName);
+            return innerIter(keyObj.children, keyFullPath);
+          default:
+            throw new Error(`Undefined key type: "${keyObj.type}"`);
         }
-        return plainKeyValueObj;
       });
 
-    return plainKeyValues;
-  },
-  getPlainStr(plainKeyValues) {
-    const plainStrArr = plainKeyValues
-      .sort(this.plainSort)
-      .flatMap((plainKeyValueObj) => plainKeyValueObj.getPlainKeyValueStr());
+    return plainKeyValues.join('\n');
+  };
 
-    return plainStrArr.join('\n');
-  },
-  toString(comparisonObj) {
-    const iter = (innerComparisonObj, parentKeyPath) => {
-      // Get full path to the root key
-      const fullRootKeyPath = this.getRootFullPath(innerComparisonObj.rootKey, parentKeyPath);
-
-      // Get array of PlainKeyValue object for added ComparisonsKeyValue objects
-      const addedPlainKeys = this.getPlainKeys(
-        this.added,
-        fullRootKeyPath,
-        innerComparisonObj.addedKeys,
-      );
-
-      // Get array of PlainKeyValue object for removed ComparisonsKeyValue objects
-      const removedPlainKeys = this.getPlainKeys(
-        this.removed,
-        fullRootKeyPath,
-        innerComparisonObj.removedKeys,
-      );
-
-      // Get array of PlainKeyValue object for changed ComparisonsKeyValue objects
-      const changedPlainKeys = this.getPlainKeys(
-        this.changed,
-        fullRootKeyPath,
-        innerComparisonObj.changedKeys,
-      );
-
-      const commonObjectPlainKeys = innerComparisonObj.commonObjectKeys
-        .flatMap((comparisonSubObj) => {
-          const commonObjectPlainStr = iter(comparisonSubObj, fullRootKeyPath);
-          // Get Plain common object Key for ComparisonsKeyValue object
-          const commonObjectPlainKey = this.getCommonObjectPlainKey(
-            this.common,
-            fullRootKeyPath,
-            comparisonSubObj.rootKey,
-            commonObjectPlainStr,
-          );
-
-          return commonObjectPlainKey;
-        });
-
-      // Get string in plain format for the PlainKeValue objects array
-      const plainStr = this.getPlainStr([
-        ...addedPlainKeys,
-        ...removedPlainKeys,
-        ...changedPlainKeys,
-        ...commonObjectPlainKeys,
-      ]);
-
-      // Build final string
-      return plainStr;
-    };
-
-    return iter(comparisonObj, null);
-  },
+  return innerIter(comparisonAST, null);
 };
 
-export default Plain;
+export default getPlainResult;

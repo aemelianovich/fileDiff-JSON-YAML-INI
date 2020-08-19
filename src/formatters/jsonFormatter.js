@@ -1,9 +1,7 @@
-const JsonFormatter = {
-  toString(comparisonObj) {
-    const jsonStr = JSON.stringify(comparisonObj, null, 2);
+const getJSONResult = (comparisonAST) => {
+  const jsonStr = JSON.stringify(comparisonAST, null, 2);
 
-    return jsonStr;
-  },
+  return jsonStr;
 };
 
-export default JsonFormatter;
+export default getJSONResult;

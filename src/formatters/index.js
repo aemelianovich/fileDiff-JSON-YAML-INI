@@ -1,22 +1,18 @@
-import Comparison from '../comparison.js';
-import Stylish from './stylish.js';
-import Plain from './plain.js';
-import JsonFormatter from './jsonFormatter.js';
+import getStylishResult from './stylish.js';
+import getPlainResult from './plain.js';
+import getJSONResult from './jsonFormatter.js';
 
-const getFormattedDiffStr = (obj1, obj2, format) => {
-  const comparisonObj = Object.create(Comparison);
-  comparisonObj.initComparison(obj1, obj2);
-
+const getFormattedDiffStr = (comparisonAST, format) => {
   let formattedStr;
   switch (format.toLowerCase()) {
     case 'stylish':
-      formattedStr = Stylish.toString(comparisonObj);
+      formattedStr = getStylishResult(comparisonAST);
       break;
     case 'plain':
-      formattedStr = Plain.toString(comparisonObj);
+      formattedStr = getPlainResult(comparisonAST);
       break;
     case 'json':
-      formattedStr = JsonFormatter.toString(comparisonObj);
+      formattedStr = getJSONResult(comparisonAST);
       break;
     default:
       throw new Error(`Unsupported format: "${format}"`);

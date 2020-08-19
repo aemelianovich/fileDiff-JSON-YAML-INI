@@ -1,0 +1,98 @@
+{
+    "nestedKeys": [
+      {
+        "children": [
+          {
+            "keyName": "follow",
+            "type": "added",
+            "value": false
+          },
+          {
+            "keyName": "setting4",
+            "type": "added",
+            "value": "blah blah"
+          },
+          {
+            "keyName": "setting5",
+            "type": "added",
+            "value": {
+              "key5": "value5"
+            }
+          },
+          {
+            "keyName": "setting2",
+            "type": "removed",
+            "value": 200
+          },
+          {
+            "keyName": "setting1",
+            "type": "notChanged",
+            "value": "Value 1"
+          },
+          {
+            "keyName": "setting3",
+            "type": "changed",
+            "value1": true,
+            "value2": {
+              "key": "value"
+            }
+          },
+          {
+            "children": [
+              {
+                "keyName": "ops",
+                "type": "added",
+                "value": "vops"
+              },
+              {
+                "keyName": "key",
+                "type": "notChanged",
+                "value": "value"
+              },
+              {
+                "children": [
+                  {
+                    "keyName": "wow",
+                    "type": "changed",
+                    "value1": "too much",
+                    "value2": "so much"
+                  }
+                ],
+                "keyName": "doge",
+                "type": "nested"
+              }
+            ],
+            "keyName": "setting6",
+            "type": "nested"
+          }
+        ],
+        "keyName": "common",
+        "type": "nested"
+      },
+      {
+        "children": [
+          {
+            "keyName": "baz",
+            "type": "changed",
+            "value1": "bas",
+            "value2": "bars"
+          },
+          {
+            "keyName": "foo",
+            "type": "notChanged",
+            "value": "bar"
+          },
+          {
+            "keyName": "nest",
+            "type": "changed",
+            "value1": {
+              "key": "value"
+            },
+            "value2": "str"
+          }
+        ],
+        "keyName": "group1",
+        "type": "nested"
+      }
+    ]
+  }
