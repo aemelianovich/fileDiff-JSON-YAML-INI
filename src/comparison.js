@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { sortStrASC } from './utils.js';
 
 const getComparisonAST = (obj1, obj2) => {
   const allKeys = _.union(Object.keys(obj1), Object.keys(obj2));
@@ -46,10 +45,9 @@ const getComparisonAST = (obj1, obj2) => {
         default:
           throw new Error(`Undefined key existence combination (isObj1Key = "${isObj1Key}", isObj2Key = "${isObj2Key}"`);
       }
-    })
-    .sort((objSort1, objSort2) => sortStrASC(objSort1.keyName, objSort2.keyName));
+    });
 
-  return comparisonAST;
+  return _.sortBy(comparisonAST, [(obj) => obj.keyName]);
 };
 
 export default getComparisonAST;

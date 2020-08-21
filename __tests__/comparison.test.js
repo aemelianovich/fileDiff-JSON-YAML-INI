@@ -1,6 +1,7 @@
 import { test, expect, beforeEach } from '@jest/globals';
+import _ from 'lodash';
 import getComparisonAST from '../src/comparison.js';
-import { readFixture, sortStrASC } from '../src/utils.js';
+import { readFixture } from '../src/utils.js';
 
 // Init variables
 let obj1;
@@ -27,13 +28,13 @@ beforeEach(() => {
   changedKeysResult = JSON.parse(readFixture('comparison_files/changed_keys_result.json')).changedKeys;
   nestedKeysResult = JSON.parse(readFixture('comparison_files/nested_keys_result.json')).nestedKeys;
 
-  comparisonASTResult = [
+  comparisonASTResult = _.sortBy([
     ...addedKeysResult,
     ...removedKeysResult,
     ...notChangedKeysResult,
     ...changedKeysResult,
     ...nestedKeysResult,
-  ].sort((objSort1, objSort2) => sortStrASC(objSort1.keyName, objSort2.keyName));
+  ], [(obj) => obj.keyName]);
 });
 
 test('Test AST tree: getComparisonAST(obj1, obj2)', () => {
