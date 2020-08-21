@@ -1,27 +1,5 @@
 [
   {
-    "keyName": "group3",
-    "type": "added",
-    "value": {
-      "fee": 100500,
-      "deep": {
-        "id": {
-          "number": 45
-        }
-      }
-    }
-  },
-  {
-    "keyName": "group2",
-    "type": "removed",
-    "value": {
-      "abc": 12345,
-      "deep": {
-        "id": 45
-      }
-    }
-  },
-  {
     "keyName": "common",
     "type": "nested",
     "children": [
@@ -29,6 +7,24 @@
         "keyName": "follow",
         "type": "added",
         "value": false
+      },
+      {
+        "keyName": "setting1",
+        "type": "notChanged",
+        "value": "Value 1"
+      },
+      {
+        "keyName": "setting2",
+        "type": "removed",
+        "value": 200
+      },
+      {
+        "keyName": "setting3",
+        "type": "changed",
+        "value1": true,
+        "value2": {
+          "key": "value"
+        }
       },
       {
         "keyName": "setting4",
@@ -43,37 +39,9 @@
         }
       },
       {
-        "keyName": "setting2",
-        "type": "removed",
-        "value": 200
-      },
-      {
-        "keyName": "setting1",
-        "type": "notChanged",
-        "value": "Value 1"
-      },
-      {
-        "keyName": "setting3",
-        "type": "changed",
-        "value1": true,
-        "value2": {
-          "key": "value"
-        }
-      },
-      {
         "keyName": "setting6",
         "type": "nested",
         "children": [
-          {
-            "keyName": "ops",
-            "type": "added",
-            "value": "vops"
-          },
-          {
-            "keyName": "key",
-            "type": "notChanged",
-            "value": "value"
-          },
           {
             "keyName": "doge",
             "type": "nested",
@@ -85,6 +53,16 @@
                 "value2": "so much"
               }
             ]
+          },
+          {
+            "keyName": "key",
+            "type": "notChanged",
+            "value": "value"
+          },
+          {
+            "keyName": "ops",
+            "type": "added",
+            "value": "vops"
           }
         ]
       }
@@ -114,5 +92,27 @@
         "value2": "str"
       }
     ]
+  },
+  {
+    "keyName": "group2",
+    "type": "removed",
+    "value": {
+      "abc": 12345,
+      "deep": {
+        "id": 45
+      }
+    }
+  },
+  {
+    "keyName": "group3",
+    "type": "added",
+    "value": {
+      "fee": 100500,
+      "deep": {
+        "id": {
+          "number": 45
+        }
+      }
+    }
   }
 ]

@@ -8,6 +8,24 @@
             "value": false
           },
           {
+            "keyName": "setting1",
+            "type": "notChanged",
+            "value": "Value 1"
+          },
+          {
+            "keyName": "setting2",
+            "type": "removed",
+            "value": 200
+          },
+          {
+            "keyName": "setting3",
+            "type": "changed",
+            "value1": true,
+            "value2": {
+              "key": "value"
+            }
+          },
+          {
             "keyName": "setting4",
             "type": "added",
             "value": "blah blah"
@@ -20,35 +38,7 @@
             }
           },
           {
-            "keyName": "setting2",
-            "type": "removed",
-            "value": 200
-          },
-          {
-            "keyName": "setting1",
-            "type": "notChanged",
-            "value": "Value 1"
-          },
-          {
-            "keyName": "setting3",
-            "type": "changed",
-            "value1": true,
-            "value2": {
-              "key": "value"
-            }
-          },
-          {
             "children": [
-              {
-                "keyName": "ops",
-                "type": "added",
-                "value": "vops"
-              },
-              {
-                "keyName": "key",
-                "type": "notChanged",
-                "value": "value"
-              },
               {
                 "children": [
                   {
@@ -60,6 +50,16 @@
                 ],
                 "keyName": "doge",
                 "type": "nested"
+              },
+              {
+                "keyName": "key",
+                "type": "notChanged",
+                "value": "value"
+              },
+              {
+                "keyName": "ops",
+                "type": "added",
+                "value": "vops"
               }
             ],
             "keyName": "setting6",

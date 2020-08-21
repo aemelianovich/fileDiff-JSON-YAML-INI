@@ -1,6 +1,7 @@
 import { test, expect, beforeEach } from '@jest/globals';
 import getComparisonAST from '../src/comparison.js';
-import { readFixture } from '../src/utils.js';
+import { readFixture, sortStrASC } from '../src/utils.js';
+
 // Init variables
 let obj1;
 let obj2;
@@ -32,7 +33,7 @@ beforeEach(() => {
     ...notChangedKeysResult,
     ...changedKeysResult,
     ...nestedKeysResult,
-  ];
+  ].sort((objSort1, objSort2) => sortStrASC(objSort1.keyName, objSort2.keyName));
 });
 
 test('Test AST tree: getComparisonAST(obj1, obj2)', () => {

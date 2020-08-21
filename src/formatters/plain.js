@@ -1,15 +1,5 @@
 import _ from 'lodash';
-
-const plainSort = (obj1, obj2) => {
-  if (obj1.keyName < obj2.keyName) {
-    return -1;
-  }
-  if (obj1.keyName > obj2.keyName) {
-    return 1;
-  }
-
-  return 0;
-};
+import { sortStrASC } from '../utils.js';
 
 const getKeyFullPath = (parentKeyFullPath, keyName) => {
   const keyFullPath = (parentKeyFullPath) ? `${parentKeyFullPath}.${keyName}` : keyName;
@@ -51,7 +41,7 @@ const getPlainResult = (comparisonAST) => {
         || keyObj.type === 'changed'
         || keyObj.type === 'nested'
       ))
-      .sort(plainSort)
+      .sort((obj1, obj2) => sortStrASC(obj1.keyName, obj2.keyName))
       .map((keyObj) => {
         let keyFullPath;
         switch (keyObj.type) {

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { sortStrASC } from '../utils.js';
 
 const stylishIndentNum = 4;
 
@@ -7,17 +8,6 @@ const removedSign = '- ';
 const changedSign = { firstKeySign: '- ', secondKeySign: '+ ' };
 const notChangedSign = '';
 const emptySign = '';
-
-const stylishSort = (obj1, obj2) => {
-  if (obj1.keyName < obj2.keyName) {
-    return -1;
-  }
-  if (obj1.keyName > obj2.keyName) {
-    return 1;
-  }
-
-  return 0;
-};
 
 const getIndentNum = (indentNum, keyDepthLevel) => (indentNum + keyDepthLevel * indentNum);
 const getIndentStr = (indentNum, keyDepthLevel) => (' '.repeat(getIndentNum(indentNum, keyDepthLevel)));
@@ -51,7 +41,7 @@ const getStylishStr = (keyObj, sign, depthLevel) => {
     .map(([keyName, value]) => ({ keyName, value }));
 
   const stylishObjStr = objKeyValues
-    .sort(stylishSort)
+    .sort((obj1, obj2) => sortStrASC(obj1.keyName, obj2.keyName))
     .map((keyValueObj) => getStylishStr(keyValueObj, emptySign, depthLevel + 1))
     .join('\n');
 
@@ -69,7 +59,7 @@ const getStylishStr = (keyObj, sign, depthLevel) => {
 const getStylishResult = (comparisonAST) => {
   const innerIter = (innerComparisonAST, depthLevel) => {
     const stylishKeyValues = innerComparisonAST
-      .sort(stylishSort)
+      .sort((obj1, obj2) => sortStrASC(obj1.keyName, obj2.keyName))
       .map((keyObj) => {
         let stylishChangedValue1;
         let stylishChangedValue2;
