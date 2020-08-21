@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { sortStrASC } from '../utils.js';
 
 const stylishIndentNum = 4;
 
@@ -41,7 +40,6 @@ const getStylishStr = (keyObj, sign, depthLevel) => {
     .map(([keyName, value]) => ({ keyName, value }));
 
   const stylishObjStr = objKeyValues
-    .sort((obj1, obj2) => sortStrASC(obj1.keyName, obj2.keyName))
     .map((keyValueObj) => getStylishStr(keyValueObj, emptySign, depthLevel + 1))
     .join('\n');
 
@@ -59,7 +57,6 @@ const getStylishStr = (keyObj, sign, depthLevel) => {
 const getStylishResult = (comparisonAST) => {
   const innerIter = (innerComparisonAST, depthLevel) => {
     const stylishKeyValues = innerComparisonAST
-      .sort((obj1, obj2) => sortStrASC(obj1.keyName, obj2.keyName))
       .map((keyObj) => {
         let stylishChangedValue1;
         let stylishChangedValue2;
