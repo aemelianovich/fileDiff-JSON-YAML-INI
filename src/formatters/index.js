@@ -3,22 +3,16 @@ import getPlainResult from './plain.js';
 import getJSONResult from './jsonFormatter.js';
 
 const getFormattedDiffStr = (comparisonAST, format) => {
-  let formattedStr;
   switch (format.toLowerCase()) {
     case 'stylish':
-      formattedStr = getStylishResult(comparisonAST);
-      break;
+      return getStylishResult(comparisonAST);
     case 'plain':
-      formattedStr = getPlainResult(comparisonAST);
-      break;
+      return getPlainResult(comparisonAST);
     case 'json':
-      formattedStr = getJSONResult(comparisonAST);
-      break;
+      return getJSONResult(comparisonAST);
     default:
       throw new Error(`Unsupported format: "${format}"`);
   }
-
-  return formattedStr;
 };
 
 export default getFormattedDiffStr;

@@ -33,31 +33,17 @@ const parseINI = (data) => {
 };
 
 const parseFile = (data, format) => {
-  let parse;
   switch (format.toLowerCase()) {
     case '.json':
-      parse = JSON.parse;
-      break;
+      return JSON.parse(data);
     case '.yml':
     case '.yaml':
-      parse = yaml.safeLoad;
-      break;
+      return yaml.safeLoad(data);
     case '.ini':
-      parse = parseINI;
-      break;
+      return parseINI(data);
     default:
       throw new Error(`File format:"${format}" is not supported`);
   }
-
-  const result = parse(data);
-
-  const resultType = typeof (result);
-
-  if (resultType !== 'object') {
-    throw new Error(`Result should be an object. Result type: "${resultType}"`);
-  }
-
-  return result;
 };
 
 export default parseFile;

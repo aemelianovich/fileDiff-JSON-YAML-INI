@@ -10,9 +10,9 @@ const readFixture = (filename) => fs.readFileSync(getFixturePath(filename), 'utf
 
 const readFile = (filePath) => {
   const resolvedPath = path.resolve(filePath);
-  const file = fs.readFileSync(resolvedPath, 'utf-8');
+  const fileData = fs.readFileSync(resolvedPath, 'utf-8');
 
-  return file;
+  return fileData;
 };
 
 export {

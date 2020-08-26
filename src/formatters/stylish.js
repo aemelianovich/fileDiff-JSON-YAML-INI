@@ -1,105 +1,99 @@
 import _ from 'lodash';
 
-const stylishIndentNum = 4;
-
 const addedSign = '+ ';
 const removedSign = '- ';
-const changedSign = { firstKeySign: '- ', secondKeySign: '+ ' };
 const notChangedSign = '';
 const emptySign = '';
 
-const getIndentNum = (indentNum, keyDepthLevel) => (indentNum + keyDepthLevel * indentNum);
-const getIndentStr = (indentNum, keyDepthLevel) => (' '.repeat(getIndentNum(indentNum, keyDepthLevel)));
-const getKeyStr = (keyName, sign, indentNum, keyDepthLevel) => {
-  const keyIndent = getIndentNum(indentNum, keyDepthLevel) - sign.length;
-  return `${' '.repeat(keyIndent)}${sign}${keyName}`;
+const getIndentCount = (depthLevel) => {
+  const stylishIndentCount = 4;
+  return (stylishIndentCount + depthLevel * stylishIndentCount);
 };
-const getStylishPlainKeyValueStr = (keyName, value, sign, indentNum, keyDepthLevel) => {
-  const keyStr = getKeyStr(keyName, sign, indentNum, keyDepthLevel);
-  return `${keyStr}: ${value}`;
-};
+const getIndent = (depthLevel, signLength = 0) => (' '.repeat(getIndentCount(depthLevel) - signLength));
+const getStylishKeyStr = (keyName, sign, depthLevel) => (`${getIndent(depthLevel, sign.length)}${sign}${keyName}`);
 
-const getStylishObjKeyValueStr = (keyName, value, sign, indentNum, keyDepthLevel) => {
-  const keyStr = getKeyStr(keyName, sign, indentNum, keyDepthLevel);
-  return `${keyStr}: {\n${value}\n${getIndentStr(indentNum, keyDepthLevel)}}`;
-};
+const getStylishKeyValueStr = (keyName, keyValue, sign, depthLevel) => {
+  const getStylishValueStr = (value, valueDepthLevel) => {
+    // value has Object type
+    if (_.isObject(value)) {
+      const stylishValues = Object.entries(value)
+        .map(([key, val]) => getStylishKeyValueStr(key, val, emptySign, valueDepthLevel + 1));
 
-const getStylishStr = (keyObj, sign, depthLevel) => {
-  // Plain value
-  if (!(_.isObject(keyObj.value))) {
-    return getStylishPlainKeyValueStr(
-      keyObj.keyName,
-      keyObj.value,
-      sign,
-      stylishIndentNum,
-      depthLevel,
-    );
-  }
+      return `{\n${stylishValues.join('\n')}\n${getIndent(valueDepthLevel)}}`;
+    }
 
-  const objKeyValues = Object.entries(keyObj.value)
-    .map(([keyName, value]) => ({ keyName, value }));
+    // value has Plain type
+    return value;
+  };
 
-  const stylishObjStr = objKeyValues
-    .map((keyValueObj) => getStylishStr(keyValueObj, emptySign, depthLevel + 1))
-    .join('\n');
+  const stylishKeyStr = getStylishKeyStr(keyName, sign, depthLevel);
+  const stylishValueStr = getStylishValueStr(keyValue, depthLevel);
 
-  const stylishKeyValueStr = getStylishObjKeyValueStr(
-    keyObj.keyName,
-    stylishObjStr,
-    sign,
-    stylishIndentNum,
-    depthLevel,
-  );
-
-  return stylishKeyValueStr;
+  return `${stylishKeyStr}: ${stylishValueStr}`;
 };
 
 const getStylishResult = (comparisonAST) => {
   const innerIter = (innerComparisonAST, depthLevel) => {
     const stylishKeyValues = innerComparisonAST
       .map((keyObj) => {
-        let stylishChangedValue1;
-        let stylishChangedValue2;
-        let stylishNestedValue;
         switch (keyObj.type) {
           case 'added':
-            return getStylishStr(keyObj, addedSign, depthLevel);
+            return getStylishKeyValueStr(
+              keyObj.keyName,
+              keyObj.value,
+              addedSign,
+              depthLevel,
+            );
           case 'removed':
-            return getStylishStr(keyObj, removedSign, depthLevel);
-          case 'changed':
-            stylishChangedValue1 = getStylishStr(
-              { keyName: keyObj.keyName, value: keyObj.value1 },
-              changedSign.firstKeySign,
+            return getStylishKeyValueStr(
+              keyObj.keyName,
+              keyObj.value,
+              removedSign,
+              depthLevel,
+            );
+          case 'changed': {
+            const stylishChangedValue1 = getStylishKeyValueStr(
+              keyObj.keyName,
+              keyObj.value1,
+              removedSign,
               depthLevel,
             );
 
-            stylishChangedValue2 = getStylishStr(
-              { keyName: keyObj.keyName, value: keyObj.value2 },
-              changedSign.secondKeySign,
+            const stylishChangedValue2 = getStylishKeyValueStr(
+              keyObj.keyName,
+              keyObj.value2,
+              addedSign,
               depthLevel,
             );
 
             return [stylishChangedValue1, stylishChangedValue2].join('\n');
+          }
           case 'notChanged':
-            return getStylishStr(keyObj, notChangedSign, depthLevel);
-          case 'nested':
-            stylishNestedValue = innerIter(keyObj.children, depthLevel + 1);
-            return getStylishObjKeyValueStr(
+            return getStylishKeyValueStr(
+              keyObj.keyName,
+              keyObj.value,
+              notChangedSign,
+              depthLevel,
+            );
+          case 'nested': {
+            const stylishNestedValue = innerIter(keyObj.children, depthLevel + 1);
+
+            return getStylishKeyValueStr(
               keyObj.keyName,
               stylishNestedValue,
               emptySign,
-              stylishIndentNum,
               depthLevel,
             );
+          }
           default:
             throw new Error(`Undefined key type: "${keyObj.type}"`);
         }
       });
 
-    return stylishKeyValues.join('\n');
+    return ['{', stylishKeyValues.join('\n'), `${getIndent(depthLevel - 1)}}`].join('\n');
   };
 
-  return ['{', innerIter(comparisonAST, 0), '}'].join('\n');
+  return innerIter(comparisonAST, 0);
 };
 
 export default getStylishResult;

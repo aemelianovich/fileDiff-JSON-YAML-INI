@@ -41,7 +41,6 @@ const getPlainResult = (comparisonAST) => {
         || keyObj.type === 'nested'
       ))
       .map((keyObj) => {
-        let keyFullPath;
         switch (keyObj.type) {
           case 'added':
             return getAddedPlainStr(parentKeyFullPath, keyObj.keyName, keyObj.value);
@@ -54,9 +53,10 @@ const getPlainResult = (comparisonAST) => {
               keyObj.value1,
               keyObj.value2,
             );
-          case 'nested':
-            keyFullPath = getKeyFullPath(parentKeyFullPath, keyObj.keyName);
+          case 'nested': {
+            const keyFullPath = getKeyFullPath(parentKeyFullPath, keyObj.keyName);
             return innerIter(keyObj.children, keyFullPath);
+          }
           default:
             throw new Error(`Undefined key type: "${keyObj.type}"`);
         }
