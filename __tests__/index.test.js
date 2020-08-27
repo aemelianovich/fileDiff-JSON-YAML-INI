@@ -11,6 +11,7 @@ describe('Test genDiff for different styles', () => {
   const styleFormats = [
     'stylish',
     'plain',
+    'json',
   ];
 
   const inputTestParams = fileFormats.reduce((acc, fileFormat) => {
