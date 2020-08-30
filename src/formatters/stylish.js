@@ -32,9 +32,9 @@ const convertKeyValue = (keyName, keyValue, sign, depth) => {
   return `${stylishKey}: ${stylishValue}`;
 };
 
-const getStylishOutput = (comparisonAST) => {
-  const innerIter = (innerComparisonAST, depth) => {
-    const stylishKeyValues = innerComparisonAST
+const getStylishOutput = (diffAST) => {
+  const innerIter = (innerDiffAST, depth) => {
+    const stylishKeyValues = innerDiffAST
       .map((keyObj) => {
         switch (keyObj.type) {
           case 'added':
@@ -93,7 +93,7 @@ const getStylishOutput = (comparisonAST) => {
     return ['{', stylishKeyValues.join('\n'), `${getIndent(depth - 1)}}`].join('\n');
   };
 
-  return innerIter(comparisonAST, 0);
+  return innerIter(diffAST, 0);
 };
 
 export default getStylishOutput;
