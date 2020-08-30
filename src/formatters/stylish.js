@@ -5,84 +5,84 @@ const removedSign = '- ';
 const notChangedSign = '';
 const emptySign = '';
 
-const getIndentCount = (depthLevel) => {
-  const stylishIndentCount = 4;
-  return (stylishIndentCount + depthLevel * stylishIndentCount);
+const getIndentCount = (depth) => {
+  const indentCount = 4;
+  return (indentCount + depth * indentCount);
 };
-const getIndent = (depthLevel, signLength = 0) => (' '.repeat(getIndentCount(depthLevel) - signLength));
-const getStylishKeyStr = (keyName, sign, depthLevel) => (`${getIndent(depthLevel, sign.length)}${sign}${keyName}`);
+const getIndent = (depth, signLength = 0) => (' '.repeat(getIndentCount(depth) - signLength));
+const convertKey = (keyName, sign, depth) => (`${getIndent(depth, sign.length)}${sign}${keyName}`);
 
-const getStylishKeyValueStr = (keyName, keyValue, sign, depthLevel) => {
-  const getStylishValueStr = (value, valueDepthLevel) => {
+const convertKeyValue = (keyName, keyValue, sign, depth) => {
+  const convertValue = (value, valueDepth) => {
     // value has Object type
     if (_.isObject(value)) {
       const stylishValues = Object.entries(value)
-        .map(([key, val]) => getStylishKeyValueStr(key, val, emptySign, valueDepthLevel + 1));
+        .map(([key, val]) => convertKeyValue(key, val, emptySign, valueDepth + 1));
 
-      return `{\n${stylishValues.join('\n')}\n${getIndent(valueDepthLevel)}}`;
+      return `{\n${stylishValues.join('\n')}\n${getIndent(valueDepth)}}`;
     }
 
     // value has Plain type
     return value;
   };
 
-  const stylishKeyStr = getStylishKeyStr(keyName, sign, depthLevel);
-  const stylishValueStr = getStylishValueStr(keyValue, depthLevel);
+  const stylishKey = convertKey(keyName, sign, depth);
+  const stylishValue = convertValue(keyValue, depth);
 
-  return `${stylishKeyStr}: ${stylishValueStr}`;
+  return `${stylishKey}: ${stylishValue}`;
 };
 
-const getStylishResult = (comparisonAST) => {
-  const innerIter = (innerComparisonAST, depthLevel) => {
+const getStylishOutput = (comparisonAST) => {
+  const innerIter = (innerComparisonAST, depth) => {
     const stylishKeyValues = innerComparisonAST
       .map((keyObj) => {
         switch (keyObj.type) {
           case 'added':
-            return getStylishKeyValueStr(
+            return convertKeyValue(
               keyObj.keyName,
               keyObj.value,
               addedSign,
-              depthLevel,
+              depth,
             );
           case 'removed':
-            return getStylishKeyValueStr(
+            return convertKeyValue(
               keyObj.keyName,
               keyObj.value,
               removedSign,
-              depthLevel,
+              depth,
             );
           case 'changed': {
-            const stylishChangedValue1 = getStylishKeyValueStr(
+            const changedValue1 = convertKeyValue(
               keyObj.keyName,
               keyObj.value1,
               removedSign,
-              depthLevel,
+              depth,
             );
 
-            const stylishChangedValue2 = getStylishKeyValueStr(
+            const changedValue2 = convertKeyValue(
               keyObj.keyName,
               keyObj.value2,
               addedSign,
-              depthLevel,
+              depth,
             );
 
-            return [stylishChangedValue1, stylishChangedValue2].join('\n');
+            return [changedValue1, changedValue2].join('\n');
           }
           case 'notChanged':
-            return getStylishKeyValueStr(
+            return convertKeyValue(
               keyObj.keyName,
               keyObj.value,
               notChangedSign,
-              depthLevel,
+              depth,
             );
           case 'nested': {
-            const stylishNestedValue = innerIter(keyObj.children, depthLevel + 1);
+            const nestedValue = innerIter(keyObj.children, depth + 1);
 
-            return getStylishKeyValueStr(
+            return convertKeyValue(
               keyObj.keyName,
-              stylishNestedValue,
+              nestedValue,
               emptySign,
-              depthLevel,
+              depth,
             );
           }
           default:
@@ -90,10 +90,10 @@ const getStylishResult = (comparisonAST) => {
         }
       });
 
-    return ['{', stylishKeyValues.join('\n'), `${getIndent(depthLevel - 1)}}`].join('\n');
+    return ['{', stylishKeyValues.join('\n'), `${getIndent(depth - 1)}}`].join('\n');
   };
 
   return innerIter(comparisonAST, 0);
 };
 
-export default getStylishResult;
+export default getStylishOutput;

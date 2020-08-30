@@ -5,49 +5,48 @@ const getKeyFullPath = (parentKeyFullPath, keyName) => {
   return keyFullPath;
 };
 
-const getPlainValueStr = (value) => {
-  if (!(_.isObject(value))) {
-    return (typeof (value) === 'string') ? `'${value}'` : value;
+const castValueToStr = (value) => {
+  if (_.isObject(value)) {
+    return '[complex value]';
   }
 
-  return '[complex value]';
+  if (typeof (value) === 'string') {
+    return `'${value}'`;
+  }
+
+  return value;
 };
 
-const getAddedPlainStr = (parentKeyFullPath, keyName, value) => {
+const convertAddedKey = (parentKeyFullPath, keyName, value) => {
   const keyFullPath = getKeyFullPath(parentKeyFullPath, keyName);
-  const plainValueStr = getPlainValueStr(value);
-  return `Property '${keyFullPath}' was added with value: ${plainValueStr}`;
+  const plainValue = castValueToStr(value);
+  return `Property '${keyFullPath}' was added with value: ${plainValue}`;
 };
 
-const getRemovedPlainStr = (parentKeyFullPath, keyName) => {
+const convertRemovedKey = (parentKeyFullPath, keyName) => {
   const keyFullPath = getKeyFullPath(parentKeyFullPath, keyName);
   return `Property '${keyFullPath}' was removed`;
 };
 
-const getChangedPlainStr = (parentKeyFullPath, keyName, value1, value2) => {
+const convertChangedKey = (parentKeyFullPath, keyName, value1, value2) => {
   const keyFullPath = getKeyFullPath(parentKeyFullPath, keyName);
-  const plainValueStr1 = getPlainValueStr(value1);
-  const plainValueStr2 = getPlainValueStr(value2);
-  return `Property '${keyFullPath}' was updated. From ${plainValueStr1} to ${plainValueStr2}`;
+  const plainValue1 = castValueToStr(value1);
+  const plainValue2 = castValueToStr(value2);
+  return `Property '${keyFullPath}' was updated. From ${plainValue1} to ${plainValue2}`;
 };
 
-const getPlainResult = (comparisonAST) => {
-  const innerIter = (innerComparisonAST, parentKeyFullPath) => {
-    const plainKeyValues = innerComparisonAST
-      .filter((keyObj) => (
-        keyObj.type === 'added'
-        || keyObj.type === 'removed'
-        || keyObj.type === 'changed'
-        || keyObj.type === 'nested'
-      ))
+const getPlainOutput = (diffAST) => {
+  const innerIter = (innerDiffAST, parentKeyFullPath) => {
+    const plainKeyValues = innerDiffAST
+      .filter((keyObj) => (keyObj.type !== 'notChanged'))
       .map((keyObj) => {
         switch (keyObj.type) {
           case 'added':
-            return getAddedPlainStr(parentKeyFullPath, keyObj.keyName, keyObj.value);
+            return convertAddedKey(parentKeyFullPath, keyObj.keyName, keyObj.value);
           case 'removed':
-            return getRemovedPlainStr(parentKeyFullPath, keyObj.keyName);
+            return convertRemovedKey(parentKeyFullPath, keyObj.keyName);
           case 'changed':
-            return getChangedPlainStr(
+            return convertChangedKey(
               parentKeyFullPath,
               keyObj.keyName,
               keyObj.value1,
@@ -65,7 +64,7 @@ const getPlainResult = (comparisonAST) => {
     return plainKeyValues.join('\n');
   };
 
-  return innerIter(comparisonAST, null);
+  return innerIter(diffAST, null);
 };
 
-export default getPlainResult;
+export default getPlainOutput;

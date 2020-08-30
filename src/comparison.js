@@ -1,9 +1,10 @@
 import _ from 'lodash';
 
-const getComparisonAST = (obj1, obj2) => {
-  const allKeys = _.union(Object.keys(obj1), Object.keys(obj2));
+const buildDiffAST = (obj1, obj2) => {
+  const allKeys = _.union(Object.keys(obj1), Object.keys(obj2))
+    .sort();
 
-  const comparisonAST = allKeys
+  const diffAST = allKeys
     .map((key) => {
       if (!_.has(obj1, key)) {
         return {
@@ -25,7 +26,7 @@ const getComparisonAST = (obj1, obj2) => {
         return {
           keyName: key,
           type: 'nested',
-          children: getComparisonAST(obj1[key], obj2[key]),
+          children: buildDiffAST(obj1[key], obj2[key]),
         };
       }
 
@@ -45,7 +46,7 @@ const getComparisonAST = (obj1, obj2) => {
       };
     });
 
-  return _.sortBy(comparisonAST, [(obj) => obj.keyName]);
+  return diffAST;
 };
 
-export default getComparisonAST;
+export default buildDiffAST;

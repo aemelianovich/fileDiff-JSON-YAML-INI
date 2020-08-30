@@ -2,48 +2,41 @@ import yaml from 'js-yaml';
 import ini from 'ini';
 import _ from 'lodash';
 
-const convertStringToNumber = (value) => {
-  if (typeof (value) === 'string' && _.toNumber(value)) {
-    return _.toNumber(value);
-  }
+const isNumber = (value) => (_.toNumber(value) && typeof (value) === 'string');
 
-  return value;
-};
+const castStringToNumber = (obj) => {
+  const convertedObj = _.mapValues(obj, (value) => {
+    if (isNumber(value)) {
+      return _.toNumber(value);
+    }
 
-const convertObjValuesStringToNumber = (obj) => {
-  const objEntries = Object.entries(obj);
-  const convertedObj = objEntries
-    .reduce((acc, [key, val]) => {
-      const newObj = {};
-      if (_.isObject(val)) {
-        newObj[key] = convertObjValuesStringToNumber(val);
-      } else {
-        newObj[key] = convertStringToNumber(val);
-      }
+    if (_.isObject(value)) {
+      return castStringToNumber(value);
+    }
 
-      return { ...acc, ...newObj };
-    }, {});
+    return value;
+  });
 
   return convertedObj;
 };
 
 const parseINI = (data) => {
   const obj = ini.parse(data);
-  return convertObjValuesStringToNumber(obj);
+  return castStringToNumber(obj);
 };
 
-const parseFile = (data, format) => {
+const parseData = (data, format) => {
   switch (format.toLowerCase()) {
-    case '.json':
+    case 'json':
       return JSON.parse(data);
-    case '.yml':
-    case '.yaml':
+    case 'yml':
+    case 'yaml':
       return yaml.safeLoad(data);
-    case '.ini':
+    case 'ini':
       return parseINI(data);
     default:
-      throw new Error(`File format:"${format}" is not supported`);
+      throw new Error(`Data format:"${format}" is not supported`);
   }
 };
 
-export default parseFile;
+export default parseData;

@@ -1,18 +1,17 @@
-import getStylishResult from './stylish.js';
-import getPlainResult from './plain.js';
-import getJSONResult from './jsonFormatter.js';
+import getStylishOutput from './stylish.js';
+import getPlainOutput from './plain.js';
 
-const getFormattedDiffStr = (comparisonAST, format) => {
+const getFormattedOutput = (diffAST, format) => {
   switch (format.toLowerCase()) {
     case 'stylish':
-      return getStylishResult(comparisonAST);
+      return getStylishOutput(diffAST);
     case 'plain':
-      return getPlainResult(comparisonAST);
+      return getPlainOutput(diffAST);
     case 'json':
-      return getJSONResult(comparisonAST);
+      return JSON.stringify(diffAST);
     default:
       throw new Error(`Unsupported format: "${format}"`);
   }
 };
 
-export default getFormattedDiffStr;
+export default getFormattedOutput;
