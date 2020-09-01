@@ -10,90 +10,120 @@ const getIndentCount = (depth) => {
   return (indentCount + depth * indentCount);
 };
 const getIndent = (depth, signLength = 0) => (' '.repeat(getIndentCount(depth) - signLength));
-const convertKey = (keyName, sign, depth) => (`${getIndent(depth, sign.length)}${sign}${keyName}`);
 
-const convertKeyValue = (keyName, keyValue, sign, depth) => {
-  const convertValue = (value, valueDepth) => {
-    // value has Object type
-    if (_.isObject(value)) {
-      const stylishValues = Object.entries(value)
-        .map(([key, val]) => convertKeyValue(key, val, emptySign, valueDepth + 1));
+const stringifyKey = (key, sign, depth) => (`${getIndent(depth, sign.length)}${sign}${key}`);
 
-      return `{\n${stylishValues.join('\n')}\n${getIndent(valueDepth)}}`;
-    }
+const stringifyValue = (value, depth) => {
+  // value has Object type
+  if (_.isObject(value)) {
+    const stylishValues = Object.entries(value)
+      .map(([key, val]) => {
+        const stylishKey = stringifyKey(key, emptySign, depth + 1);
+        const stylishValue = stringifyValue(val, depth + 1);
 
-    // value has Plain type
-    return value;
-  };
+        return `${stylishKey}: ${stylishValue}`;
+      });
 
-  const stylishKey = convertKey(keyName, sign, depth);
-  const stylishValue = convertValue(keyValue, depth);
+    return `{\n${stylishValues.join('\n')}\n${getIndent(depth)}}`;
+  }
+
+  // value has Plain type
+  return value;
+};
+
+const convertAddedKey = (key, value, depth) => {
+  const stylishKey = stringifyKey(key, addedSign, depth);
+  const stylishValue = stringifyValue(value, depth);
+
+  return `${stylishKey}: ${stylishValue}`;
+};
+
+const convertRemovedKey = (key, value, depth) => {
+  const stylishKey = stringifyKey(key, removedSign, depth);
+  const stylishValue = stringifyValue(value, depth);
+
+  return `${stylishKey}: ${stylishValue}`;
+};
+
+const convertChangedKey = (key, value1, value2, depth) => {
+  const stylishKeyAST1 = stringifyKey(key, removedSign, depth);
+  const stylishValueAST1 = stringifyValue(value1, depth);
+  const stylishChangedKeyAST1 = `${stylishKeyAST1}: ${stylishValueAST1}`;
+
+  const stylishKeyAST2 = stringifyKey(key, addedSign, depth);
+  const stylishValueAST2 = stringifyValue(value2, depth);
+  const stylishChangedKeyAST2 = `${stylishKeyAST2}: ${stylishValueAST2}`;
+
+  return [stylishChangedKeyAST1, stylishChangedKeyAST2].join('\n');
+};
+
+const convertNotChangedKey = (key, value, depth) => {
+  const stylishKey = stringifyKey(key, notChangedSign, depth);
+  const stylishValue = stringifyValue(value, depth);
+
+  return `${stylishKey}: ${stylishValue}`;
+};
+
+const convertNestedKey = (key, value, depth) => {
+  const stylishKey = stringifyKey(key, emptySign, depth);
+  const stylishValue = stringifyValue(value, depth);
 
   return `${stylishKey}: ${stylishValue}`;
 };
 
 const getStylishOutput = (diffAST) => {
-  const innerIter = (innerDiffAST, depth) => {
-    const stylishKeyValues = innerDiffAST
-      .map((keyObj) => {
-        switch (keyObj.type) {
+  const iter = (iterDiffAST, depth) => {
+    const stylishKeyValues = iterDiffAST
+      .map((keyAST) => {
+        switch (keyAST.type) {
           case 'added':
-            return convertKeyValue(
-              keyObj.keyName,
-              keyObj.value,
-              addedSign,
+            return convertAddedKey(
+              keyAST.key,
+              keyAST.value,
               depth,
             );
           case 'removed':
-            return convertKeyValue(
-              keyObj.keyName,
-              keyObj.value,
-              removedSign,
+            return convertRemovedKey(
+              keyAST.key,
+              keyAST.value,
               depth,
             );
           case 'changed': {
-            const changedValue1 = convertKeyValue(
-              keyObj.keyName,
-              keyObj.value1,
-              removedSign,
+            return convertChangedKey(
+              keyAST.key,
+              keyAST.value1,
+              keyAST.value2,
               depth,
             );
-
-            const changedValue2 = convertKeyValue(
-              keyObj.keyName,
-              keyObj.value2,
-              addedSign,
-              depth,
-            );
-
-            return [changedValue1, changedValue2].join('\n');
           }
           case 'notChanged':
-            return convertKeyValue(
-              keyObj.keyName,
-              keyObj.value,
-              notChangedSign,
+            return convertNotChangedKey(
+              keyAST.key,
+              keyAST.value,
               depth,
             );
           case 'nested': {
-            const nestedValue = innerIter(keyObj.children, depth + 1);
+            const nestedValue = iter(keyAST.children, depth + 1);
 
-            return convertKeyValue(
-              keyObj.keyName,
+            return convertNestedKey(
+              keyAST.key,
               nestedValue,
-              emptySign,
               depth,
             );
           }
           default:
-            throw new Error(`Undefined key type: "${keyObj.type}"`);
+            throw new Error(`Undefined key type: "${keyAST.type}"`);
         }
       });
 
-    return ['{', stylishKeyValues.join('\n'), `${getIndent(depth - 1)}}`].join('\n');
+    return [
+      '{',
+      stylishKeyValues.join('\n'),
+      `${getIndent(depth - 1)}}`,
+    ].join('\n');
   };
 
-  return innerIter(diffAST, 0);
+  return iter(diffAST, 0);
 };
 
 export default getStylishOutput;

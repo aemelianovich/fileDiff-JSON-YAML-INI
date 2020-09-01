@@ -1,14 +1,13 @@
 import _ from 'lodash';
 
 const buildDiffAST = (obj1, obj2) => {
-  const allKeys = _.union(Object.keys(obj1), Object.keys(obj2))
-    .sort();
+  const allKeys = _.sortBy(_.union(Object.keys(obj1), Object.keys(obj2)));
 
   const diffAST = allKeys
     .map((key) => {
       if (!_.has(obj1, key)) {
         return {
-          keyName: key,
+          key,
           type: 'added',
           value: obj2[key],
         };
@@ -16,7 +15,7 @@ const buildDiffAST = (obj1, obj2) => {
 
       if (!_.has(obj2, key)) {
         return {
-          keyName: key,
+          key,
           type: 'removed',
           value: obj1[key],
         };
@@ -24,7 +23,7 @@ const buildDiffAST = (obj1, obj2) => {
 
       if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
         return {
-          keyName: key,
+          key,
           type: 'nested',
           children: buildDiffAST(obj1[key], obj2[key]),
         };
@@ -32,14 +31,14 @@ const buildDiffAST = (obj1, obj2) => {
 
       if (obj1[key] === obj2[key]) {
         return {
-          keyName: key,
+          key,
           type: 'notChanged',
           value: obj1[key],
         };
       }
 
       return {
-        keyName: key,
+        key,
         type: 'changed',
         value1: obj1[key],
         value2: obj2[key],

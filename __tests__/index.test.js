@@ -11,34 +11,37 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 const readFixture = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
 describe('Test genDiff for different styles', () => {
-  const styleFormats = [
-    'stylish',
-    'plain',
+  const fileTypes = [
     'json',
+    'ini',
+    'yaml',
   ];
 
-  const fileExtensions = [
-    '.json',
-    '.ini',
-    '.yaml',
-  ];
+  test.each(fileTypes)('Test genDiff for fileType = %p', (fileType) => {
+    const styleFormats = [
+      'stylish',
+      'plain',
+      'json',
+    ];
 
-  const inputTestParams = styleFormats.reduce((acc, styleFormat) => {
-    const styleInputParams = fileExtensions.map((fileExtension) => [styleFormat, fileExtension]);
-    return [...acc, ...styleInputParams];
-  }, []);
+    const filePath1 = getFixturePath(`file1.${fileType}`);
+    const filePath2 = getFixturePath(`file2.${fileType}`);
 
-  test.each(inputTestParams)(`Test genDiff with params:
-  format = %p, 
-  fileExtension = %p`, (format, fileExt) => {
-    const filePath1 = getFixturePath(`file1${fileExt}`);
-    const filePath2 = getFixturePath(`file2${fileExt}`);
-    const expectedDiff = readFixture(`${format}.txt`);
+    styleFormats.forEach((format) => {
+      let expectedDiff;
+      switch (format) {
+        case 'json':
+          expectedDiff = readFixture(`${format}.json`);
+          break;
+        default:
+          expectedDiff = readFixture(`${format}.txt`);
+      }
 
-    expect(genDiff(
-      filePath1,
-      filePath2,
-      format,
-    )).toEqual(expectedDiff);
+      expect(genDiff(
+        filePath1,
+        filePath2,
+        format,
+      )).toEqual(expectedDiff);
+    });
   });
 });

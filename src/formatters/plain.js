@@ -1,11 +1,8 @@
 import _ from 'lodash';
 
-const getKeyFullPath = (parentKeyFullPath, keyName) => {
-  const keyFullPath = (parentKeyFullPath) ? `${parentKeyFullPath}.${keyName}` : keyName;
-  return keyFullPath;
-};
+const getKeyFullPath = (parentKeys, key) => [...parentKeys, key].join('.');
 
-const castValueToStr = (value) => {
+const stringifyValue = (value) => {
   if (_.isObject(value)) {
     return '[complex value]';
   }
@@ -17,54 +14,53 @@ const castValueToStr = (value) => {
   return value;
 };
 
-const convertAddedKey = (parentKeyFullPath, keyName, value) => {
-  const keyFullPath = getKeyFullPath(parentKeyFullPath, keyName);
-  const plainValue = castValueToStr(value);
+const convertAddedKey = (parentKeys, key, value) => {
+  const keyFullPath = getKeyFullPath(parentKeys, key);
+  const plainValue = stringifyValue(value);
   return `Property '${keyFullPath}' was added with value: ${plainValue}`;
 };
 
-const convertRemovedKey = (parentKeyFullPath, keyName) => {
-  const keyFullPath = getKeyFullPath(parentKeyFullPath, keyName);
+const convertRemovedKey = (parentKeys, key) => {
+  const keyFullPath = getKeyFullPath(parentKeys, key);
   return `Property '${keyFullPath}' was removed`;
 };
 
-const convertChangedKey = (parentKeyFullPath, keyName, value1, value2) => {
-  const keyFullPath = getKeyFullPath(parentKeyFullPath, keyName);
-  const plainValue1 = castValueToStr(value1);
-  const plainValue2 = castValueToStr(value2);
+const convertChangedKey = (parentKeys, key, value1, value2) => {
+  const keyFullPath = getKeyFullPath(parentKeys, key);
+  const plainValue1 = stringifyValue(value1);
+  const plainValue2 = stringifyValue(value2);
   return `Property '${keyFullPath}' was updated. From ${plainValue1} to ${plainValue2}`;
 };
 
 const getPlainOutput = (diffAST) => {
-  const innerIter = (innerDiffAST, parentKeyFullPath) => {
-    const plainKeyValues = innerDiffAST
-      .filter((keyObj) => (keyObj.type !== 'notChanged'))
-      .map((keyObj) => {
-        switch (keyObj.type) {
+  const iter = (iterDiffAST, parentKeys) => {
+    const plainKeyValues = iterDiffAST
+      .filter((keyAST) => (keyAST.type !== 'notChanged'))
+      .map((keyAST) => {
+        switch (keyAST.type) {
           case 'added':
-            return convertAddedKey(parentKeyFullPath, keyObj.keyName, keyObj.value);
+            return convertAddedKey(parentKeys, keyAST.key, keyAST.value);
           case 'removed':
-            return convertRemovedKey(parentKeyFullPath, keyObj.keyName);
+            return convertRemovedKey(parentKeys, keyAST.key);
           case 'changed':
             return convertChangedKey(
-              parentKeyFullPath,
-              keyObj.keyName,
-              keyObj.value1,
-              keyObj.value2,
+              parentKeys,
+              keyAST.key,
+              keyAST.value1,
+              keyAST.value2,
             );
           case 'nested': {
-            const keyFullPath = getKeyFullPath(parentKeyFullPath, keyObj.keyName);
-            return innerIter(keyObj.children, keyFullPath);
+            return iter(keyAST.children, [...parentKeys, keyAST.key]);
           }
           default:
-            throw new Error(`Undefined key type: "${keyObj.type}"`);
+            throw new Error(`Undefined key type: "${keyAST.type}"`);
         }
       });
 
     return plainKeyValues.join('\n');
   };
 
-  return innerIter(diffAST, null);
+  return iter(diffAST, []);
 };
 
 export default getPlainOutput;
