@@ -8,7 +8,7 @@ const readFile = (filePath) => {
   return fileData;
 };
 
-const getFileDataFormat = (filePath) => path.extname(filePath).substr(1);
+const getFileFormat = (filePath) => path.extname(filePath).substr(1);
 
 // eslint-disable-next-line import/prefer-default-export
-export { readFile, getFileDataFormat };
+export { readFile, getFileFormat };

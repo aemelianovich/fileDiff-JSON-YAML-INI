@@ -3,15 +3,15 @@ import _ from 'lodash';
 const getKeyFullPath = (parentKeys, key) => [...parentKeys, key].join('.');
 
 const stringifyValue = (value) => {
-  if (_.isObject(value)) {
-    return '[complex value]';
+  if (!_.isObject(value) && !_.isString(value)) {
+    return value;
   }
 
-  if (typeof (value) === 'string') {
+  if (_.isString(value)) {
     return `'${value}'`;
   }
 
-  return value;
+  return '[complex value]';
 };
 
 const convertAddedKey = (parentKeys, key, value) => {
@@ -33,27 +33,22 @@ const convertChangedKey = (parentKeys, key, value1, value2) => {
 };
 
 const getPlainOutput = (diffAST) => {
-  const iter = (iterDiffAST, parentKeys) => {
-    const plainKeyValues = iterDiffAST
-      .filter((keyAST) => (keyAST.type !== 'notChanged'))
-      .map((keyAST) => {
-        switch (keyAST.type) {
+  const iter = (subTree, parentKeys) => {
+    const plainKeyValues = subTree
+      .filter((node) => (node.type !== 'notChanged'))
+      .map((node) => {
+        switch (node.type) {
           case 'added':
-            return convertAddedKey(parentKeys, keyAST.key, keyAST.value);
+            return convertAddedKey(parentKeys, node.key, node.value);
           case 'removed':
-            return convertRemovedKey(parentKeys, keyAST.key);
+            return convertRemovedKey(parentKeys, node.key);
           case 'changed':
-            return convertChangedKey(
-              parentKeys,
-              keyAST.key,
-              keyAST.value1,
-              keyAST.value2,
-            );
+            return convertChangedKey(parentKeys, node.key, node.value1, node.value2);
           case 'nested': {
-            return iter(keyAST.children, [...parentKeys, keyAST.key]);
+            return iter(node.children, [...parentKeys, node.key]);
           }
           default:
-            throw new Error(`Undefined key type: "${keyAST.type}"`);
+            throw new Error(`Undefined key type: "${node.type}"`);
         }
       });
 

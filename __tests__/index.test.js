@@ -17,31 +17,16 @@ describe('Test genDiff for different styles', () => {
     'yaml',
   ];
 
-  test.each(fileTypes)('Test genDiff for fileType = %p', (fileType) => {
-    const styleFormats = [
-      'stylish',
-      'plain',
-      'json',
-    ];
+  const stylishResult = readFixture('stylish.txt');
+  const plainResult = readFixture('plain.txt');
+  const jsonResult = readFixture('json.json');
 
+  test.each(fileTypes)('Test genDiff for fileType = %p', (fileType) => {
     const filePath1 = getFixturePath(`file1.${fileType}`);
     const filePath2 = getFixturePath(`file2.${fileType}`);
 
-    styleFormats.forEach((format) => {
-      let expectedDiff;
-      switch (format) {
-        case 'json':
-          expectedDiff = readFixture(`${format}.json`);
-          break;
-        default:
-          expectedDiff = readFixture(`${format}.txt`);
-      }
-
-      expect(genDiff(
-        filePath1,
-        filePath2,
-        format,
-      )).toEqual(expectedDiff);
-    });
+    expect(genDiff(filePath1, filePath2, 'stylish')).toEqual(stylishResult);
+    expect(genDiff(filePath1, filePath2, 'plain')).toEqual(plainResult);
+    expect(genDiff(filePath1, filePath2, 'json')).toEqual(jsonResult);
   });
 });
