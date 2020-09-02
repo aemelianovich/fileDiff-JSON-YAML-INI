@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
-const addIndent = (str, depth, signLength = 0, initIndentCount = 4) => {
+const addIndent = (origStr, depth, signLength = 0, initIndentCount = 4) => {
   const indentCount = (initIndentCount + depth * initIndentCount) - signLength;
-  return `${' '.repeat(indentCount)}${str}`;
+  return `${' '.repeat(indentCount)}${origStr}`;
 };
 
 const stringifyValue = (value, depth) => {
