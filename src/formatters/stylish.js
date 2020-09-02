@@ -51,14 +51,12 @@ const getStylishOutput = (diffAST) => {
             return convertAddedKey(node.key, node.value, depth);
           case 'removed':
             return convertRemovedKey(node.key, node.value, depth);
-          case 'changed': {
+          case 'changed':
             return convertChangedKey(node.key, node.value1, node.value2, depth);
-          }
           case 'notChanged':
             return convertKey(node.key, node.value, depth);
-          case 'nested': {
+          case 'nested':
             return convertKey(node.key, iter(node.children, depth + 1), depth);
-          }
           default:
             throw new Error(`Undefined key type: "${node.type}"`);
         }
