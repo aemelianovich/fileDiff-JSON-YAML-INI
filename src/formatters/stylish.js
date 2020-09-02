@@ -36,15 +36,10 @@ const convertRemovedKey = (key, value, depth) => {
 };
 
 const convertChangedKey = (key, value1, value2, depth) => {
-  const stylishValueAST1 = stringifyValue(value1, depth);
-  const stylishKeyAST1 = `- ${key}: ${stylishValueAST1}`;
-  const stylishChangedKeyAST1 = addIndent(stylishKeyAST1, depth, '- '.length);
+  const stylishRemovedKey = convertRemovedKey(key, value1, depth);
+  const stylishAddedKey = convertAddedKey(key, value2, depth);
 
-  const stylishValueAST2 = stringifyValue(value2, depth);
-  const stylishKeyAST2 = `+ ${key}: ${stylishValueAST2}`;
-  const stylishChangedKeyAST2 = addIndent(stylishKeyAST2, depth, '+ '.length);
-
-  return [stylishChangedKeyAST1, stylishChangedKeyAST2].join('\n');
+  return [stylishRemovedKey, stylishAddedKey].join('\n');
 };
 
 const getStylishOutput = (diffAST) => {
