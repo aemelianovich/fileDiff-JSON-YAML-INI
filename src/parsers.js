@@ -4,26 +4,18 @@ import _ from 'lodash';
 
 const isNumber = (value) => (_.toNumber(value) && typeof (value) === 'string');
 
-const castStringToNumber = (obj) => {
-  const convertedObj = _.mapValues(obj, (value) => {
-    if (isNumber(value)) {
-      return _.toNumber(value);
-    }
+const castStringToNumber = (obj) => (_.mapValues(obj, (value) => {
+  if (isNumber(value)) {
+    return _.toNumber(value);
+  }
+  if (_.isObject(value)) {
+    return castStringToNumber(value);
+  }
 
-    if (_.isObject(value)) {
-      return castStringToNumber(value);
-    }
+  return value;
+}));
 
-    return value;
-  });
-
-  return convertedObj;
-};
-
-const parseINI = (data) => {
-  const obj = ini.parse(data);
-  return castStringToNumber(obj);
-};
+const parseINI = (data) => castStringToNumber(ini.parse(data));
 
 const parseData = (data, format) => {
   switch (format.toLowerCase()) {

@@ -12,55 +12,47 @@ const stringifyValue = (value, depth) => {
 
   const stylishValues = Object.entries(value)
     // eslint-disable-next-line no-use-before-define
-    .map(([key, val]) => convertKey(key, val, depth + 1));
+    .map(([key, val]) => formatNotChanged(key, val, depth + 1));
 
   return `{\n${stylishValues.join('\n')}\n${addIndent('}', depth)}`;
 };
 
-const convertKey = (key, value, depth) => {
+const formatNotChanged = (key, value, depth) => {
   const stylishValue = stringifyValue(value, depth);
   const stylishKey = `${key}: ${stylishValue}`;
   return addIndent(stylishKey, depth);
 };
 
-const convertAddedKey = (key, value, depth) => {
+const formatAdded = (key, value, depth) => {
   const stylishValue = stringifyValue(value, depth);
   const stylishKey = `+ ${key}: ${stylishValue}`;
   return addIndent(stylishKey, depth, '+ '.length);
 };
 
-const convertRemovedKey = (key, value, depth) => {
+const formatRemoved = (key, value, depth) => {
   const stylishValue = stringifyValue(value, depth);
   const stylishKey = `- ${key}: ${stylishValue}`;
   return addIndent(stylishKey, depth, '- '.length);
 };
 
-const convertChangedKey = (key, value1, value2, depth) => {
-  const stylishRemovedKey = convertRemovedKey(key, value1, depth);
-  const stylishAddedKey = convertAddedKey(key, value2, depth);
+const formatChanged = (key, value1, value2, depth) => {
+  const stylishRemovedKey = formatRemoved(key, value1, depth);
+  const stylishAddedKey = formatAdded(key, value2, depth);
 
   return [stylishRemovedKey, stylishAddedKey].join('\n');
 };
 
-const getStylishOutput = (diffAST) => {
+const formatStylish = (diff) => {
   const iter = (subTree, depth) => {
-    const stylishKeyValues = subTree
-      .map((node) => {
-        switch (node.type) {
-          case 'added':
-            return convertAddedKey(node.key, node.value, depth);
-          case 'removed':
-            return convertRemovedKey(node.key, node.value, depth);
-          case 'changed':
-            return convertChangedKey(node.key, node.value1, node.value2, depth);
-          case 'notChanged':
-            return convertKey(node.key, node.value, depth);
-          case 'nested':
-            return convertKey(node.key, iter(node.children, depth + 1), depth);
-          default:
-            throw new Error(`Undefined key type: "${node.type}"`);
-        }
-      });
+    const mapping = {
+      added: (node) => formatAdded(node.key, node.value, depth),
+      removed: (node) => formatRemoved(node.key, node.value, depth),
+      changed: (node) => formatChanged(node.key, node.value1, node.value2, depth),
+      notChanged: (node) => formatNotChanged(node.key, node.value, depth),
+      nested: (node) => formatNotChanged(node.key, iter(node.children, depth + 1), depth),
+    };
+
+    const stylishKeyValues = subTree.map((node) => mapping[node.type](node, depth));
 
     return [
       '{',
@@ -69,7 +61,7 @@ const getStylishOutput = (diffAST) => {
     ].join('\n');
   };
 
-  return iter(diffAST, 0);
+  return iter(diff, 0);
 };
 
-export default getStylishOutput;
+export default formatStylish;

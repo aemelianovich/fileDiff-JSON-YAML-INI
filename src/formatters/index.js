@@ -1,17 +1,17 @@
-import getStylishOutput from './stylish.js';
-import getPlainOutput from './plain.js';
+import formatStylish from './stylish.js';
+import formatPlain from './plain.js';
 
-const getFormattedOutput = (diffAST, format) => {
-  switch (format.toLowerCase()) {
+const format = (diff, formatType) => {
+  switch (formatType.toLowerCase()) {
     case 'stylish':
-      return getStylishOutput(diffAST);
+      return formatStylish(diff);
     case 'plain':
-      return getPlainOutput(diffAST);
+      return formatPlain(diff);
     case 'json':
-      return JSON.stringify(diffAST);
+      return JSON.stringify(diff);
     default:
-      throw new Error(`Unsupported format: "${format}"`);
+      throw new Error(`Unsupported format: "${formatType}"`);
   }
 };
 
-export default getFormattedOutput;
+export default format;
