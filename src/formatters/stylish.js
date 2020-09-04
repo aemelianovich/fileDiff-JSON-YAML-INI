@@ -1,64 +1,35 @@
 import _ from 'lodash';
 
-const addIndent = (origStr, depth, signLength = 0, initIndentCount = 4) => {
-  const indentCount = (initIndentCount + depth * initIndentCount) - signLength;
-  return `${' '.repeat(indentCount)}${origStr}`;
-};
+const getIndent = (depth) => '  '.repeat(depth);
 
-const stringifyValue = (value, depth) => {
-  if (!_.isObject(value)) {
-    return value;
+const stringifyValue = (data, depth, mapping) => {
+  if (!_.isObject(data)) {
+    return data;
   }
 
-  const stylishValues = Object.entries(value)
-    // eslint-disable-next-line no-use-before-define
-    .map(([key, val]) => formatNotChanged(key, val, depth + 1));
+  const stylishValues = Object.entries(data)
+    .map(([key, value]) => mapping.notChanged({ key, value }, depth + 2));
 
-  return `{\n${stylishValues.join('\n')}\n${addIndent('}', depth)}`;
-};
-
-const formatNotChanged = (key, value, depth) => {
-  const stylishValue = stringifyValue(value, depth);
-  const stylishKey = `${key}: ${stylishValue}`;
-  return addIndent(stylishKey, depth);
-};
-
-const formatAdded = (key, value, depth) => {
-  const stylishValue = stringifyValue(value, depth);
-  const stylishKey = `+ ${key}: ${stylishValue}`;
-  return addIndent(stylishKey, depth, '+ '.length);
-};
-
-const formatRemoved = (key, value, depth) => {
-  const stylishValue = stringifyValue(value, depth);
-  const stylishKey = `- ${key}: ${stylishValue}`;
-  return addIndent(stylishKey, depth, '- '.length);
-};
-
-const formatChanged = (key, value1, value2, depth) => {
-  const stylishRemovedKey = formatRemoved(key, value1, depth);
-  const stylishAddedKey = formatAdded(key, value2, depth);
-
-  return [stylishRemovedKey, stylishAddedKey].join('\n');
+  return `{\n${stylishValues.join('\n')}\n${getIndent(depth + 2)}}`;
 };
 
 const mapping = {
-  added: (node, depth) => formatAdded(node.key, node.value, depth),
-  removed: (node, depth) => formatRemoved(node.key, node.value, depth),
-  changed: (node, depth) => formatChanged(node.key, node.value1, node.value2, depth),
-  notChanged: (node, depth) => formatNotChanged(node.key, node.value, depth),
-  nested: (node, depth, iter) => formatNotChanged(node.key, iter(node.children, depth + 1), depth),
+  added: (node, depth) => `${getIndent(depth)}  + ${node.key}: ${stringifyValue(node.value, depth, mapping)}`,
+  removed: (node, depth) => `${getIndent(depth)}  - ${node.key}: ${stringifyValue(node.value, depth, mapping)}`,
+  changed: (node, depth) => {
+    const output1 = `${getIndent(depth)}  - ${node.key}: ${stringifyValue(node.value1, depth, mapping)}`;
+    const output2 = `${getIndent(depth)}  + ${node.key}: ${stringifyValue(node.value2, depth, mapping)}`;
+    return [output1, output2];
+  },
+  notChanged: (node, depth) => `${getIndent(depth)}    ${node.key}: ${stringifyValue(node.value, depth, mapping)}`,
+  nested: (node, depth, iter) => `${getIndent(depth)}    ${node.key}: ${iter(node.children, depth + 2)}`,
 };
 
 const formatStylish = (diff) => {
   const iter = (subTree, depth) => {
-    const stylishKeyValues = subTree.map((node) => mapping[node.type](node, depth, iter));
+    const stylishOutput = subTree.flatMap((node) => mapping[node.type](node, depth, iter));
 
-    return [
-      '{',
-      stylishKeyValues.join('\n'),
-      addIndent('}', depth - 1),
-    ].join('\n');
+    return `{\n${stylishOutput.join('\n')}\n${getIndent(depth)}}`;
   };
 
   return iter(diff, 0);
