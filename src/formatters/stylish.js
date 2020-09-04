@@ -42,17 +42,17 @@ const formatChanged = (key, value1, value2, depth) => {
   return [stylishRemovedKey, stylishAddedKey].join('\n');
 };
 
+const mapping = {
+  added: (node, depth) => formatAdded(node.key, node.value, depth),
+  removed: (node, depth) => formatRemoved(node.key, node.value, depth),
+  changed: (node, depth) => formatChanged(node.key, node.value1, node.value2, depth),
+  notChanged: (node, depth) => formatNotChanged(node.key, node.value, depth),
+  nested: (node, depth, iter) => formatNotChanged(node.key, iter(node.children, depth + 1), depth),
+};
+
 const formatStylish = (diff) => {
   const iter = (subTree, depth) => {
-    const mapping = {
-      added: (node) => formatAdded(node.key, node.value, depth),
-      removed: (node) => formatRemoved(node.key, node.value, depth),
-      changed: (node) => formatChanged(node.key, node.value1, node.value2, depth),
-      notChanged: (node) => formatNotChanged(node.key, node.value, depth),
-      nested: (node) => formatNotChanged(node.key, iter(node.children, depth + 1), depth),
-    };
-
-    const stylishKeyValues = subTree.map((node) => mapping[node.type](node, depth));
+    const stylishKeyValues = subTree.map((node) => mapping[node.type](node, depth, iter));
 
     return [
       '{',
